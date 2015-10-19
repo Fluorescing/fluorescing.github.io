@@ -12,6 +12,8 @@ $alpha-color: #C7DBA3;
 $beta-color: #B1A4BD;
 $complementary-color: #d99e4b;
 
+$white-background: #edead9;
+
 $secondary-color: $complementary-color;
 $adjacent-color: $beta-color;
 
@@ -28,7 +30,7 @@ body
 
 .container
 {
-    background-color: #FFFFFF;
+    background-color: $white-background;
     background-image: url("../img/bgwhite.jpg");
     border: 2px solid darken($primary-color, 20%);
     border-radius: 10px;
