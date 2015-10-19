@@ -3,7 +3,9 @@ layout: post
 title: The Turing Machine
 tags: default
 ---
-&emsp;I wrote this to help explain a difficult concept.  It is a concept I have occasionally brought up to friends in the past, much to their apparent chagrin.  The Turing Machine; a machine, that when mentioned, may cause eyes to glaze over.  So to fix this, let me tell you about what the Turing machine is from a historical perspective.  First I must mention the person for whom this machine is named: Alan Turing---mathematician, cryptanalyst, and pioneering computer scientist.
+&emsp;*I wrote this essay as practice after not having written anything longer than a paragraph in quite some time.  So forgive me if I have left in any glaring mistakes in my writing.*
+
+&emsp;I'm writing this to help explain a difficult concept.  It is a concept I have occasionally brought up to friends in the past, much to their apparent chagrin.  The Turing Machine; a machine, that when mentioned, may cause some eyes to glaze over.  So I will try to fix this by explaining in detail what the Turing machine is from a historical perspective; as opposed to a mathematical perspective.  First I must mention the person for whom this machine is named: Alan Turing---mathematician, cryptanalyst, and pioneering computer scientist.
 
 {% include image.html url="/img/notes/alan-turing.jpg" description="Alan Turing." width="50%" %}
 
