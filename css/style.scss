@@ -239,3 +239,11 @@ a:hover
     background: darken($adjacent-color, 10%);
     font-family: 'Arimo', Helvetica, sans-serif;
 }
+
+.cv-degrees dt {
+    width: 80px;
+}
+
+.cv-degrees dd {
+    margin-left: 100px;
+}
