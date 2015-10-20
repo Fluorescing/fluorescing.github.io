@@ -38,9 +38,6 @@ tags: default
 &emsp;Getting back to the Turing Machine, if a machine was Turing Equivalent with the Turing Machine itself, then that machine is Turing Complete.  Said machine would be capable of all that the Turing Machine is capable of, and nothing more.  This can also apply to modern computer languages, such as Python, C++, and Brainfuck---all of which are Turing Complete.  We can say a computer language is Turing Complete if it can be used to emulate a Turing Machine, and vice versa.  It implies that that computer language can compute and solve any problem the Turing Machine can solve.  It demonstrates the full set of abilities a computer language can utilize.
 
 &emsp;The Turing Machine remains a key topic in Computer Science, alongside the concept of Turing Equivalence and Turing Completeness.  New computer languages and machines are often initially tested to check if they are Turing Complete.  Alan Turing, the man who created the Turing machine, would go on to help the Allied forces win World War II.  But it would be his theoretical machine and related concepts that would help to usher in the information age.
-
-
-
 --------
 
 **References:**
