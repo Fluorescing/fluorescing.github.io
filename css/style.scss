@@ -240,10 +240,12 @@ a:hover
     font-family: 'Arimo', Helvetica, sans-serif;
 }
 
-.cv-degrees dt {
-    width: 80px;
-}
+@media (min-width: 768px) {
+    .cv-degrees dt {
+        width: 80px;
+    }
 
-.cv-degrees dd {
-    margin-left: 100px;
+    .cv-degrees dd {
+        margin-left: 100px;
+    }
 }
