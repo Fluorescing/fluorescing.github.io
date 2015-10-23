@@ -1,0 +1,138 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+{% include head.html %}
+</head>
+
+<body>
+
+<div class="container">
+{% include header.html %}
+
+<h2>Polarized Light and Corn Syrup Demo</h2>
+<h3>by Shane Stahlheber</h3>
+
+<canvas id="canvas" class="demo-canvas" width="200" height="16"></canvas>
+
+<h4>Front Polarization Filter: </h4>
+<p><input type="checkbox" id="polenabled" checked="enabled" /><label for="polenabled" id="polenabledlabel"><span id="polen">Disable</span></label></p>
+
+<h4>Polarization Angle: <span id="polangle">90&deg;</span></h4>
+<p><div id="slider"></div></p>
+
+<h4>Color Filters:</h4>
+<p>
+<div id="filters">
+  <input type="radio" name="filter" id="none" value="none" /><label id="nl" for="none">None</label>
+  <input type="radio" name="filter" id="red" value="red" /><label id="rl" for="red">Red</label>
+  <input type="radio" name="filter" id="green" value="green" /><label id="gl" for="green">Green</label>
+  <input type="radio" name="filter" id="blue" value="blue" /><label id="bl" for="blue">Blue</label>
+</div>
+</p>
+
+{% include footer.html %}
+</div> <!-- /container -->
+
+{% include scripts.html %}
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript"></script>
+<script src="math.js" type="text/javascript"></script>
+<script type="text/javascript" src="Functional.js"></script>
+<script type="text/javascript" src="Complex.js"></script>
+<script type="text/javascript" src="CVec.js"></script>
+<script type="text/javascript" src="SyrupDemo.js"></script>
+<script type="text/javascript">
+var cw = $('.demo-canvas').width();
+$('.demo-canvas').css({
+    'height': cw + 'px'
+});
+
+var demo = new SyrupDemo(null);
+
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+var polfilter = true;
+var polangle = 90;
+var red = true;
+var green = true;
+var blue = true;
+
+function update() {
+    demo.update(ctx, polangle/180*Math.PI, polfilter, red, green, blue);
+}
+
+// reset all check boxes
+$("#polenabled").attr("checked", true);
+$("#red").removeAttr("checked");
+$("#green").removeAttr("checked");
+$("#blue").removeAttr("checked");
+
+// tabs
+$(function() {
+    $( "#tabs" ).tabs();
+});
+
+// Slider
+$('#slider').slider({
+    range: "min",
+    min: 0,
+    max: 180,
+    step: 1,
+    value: 90,
+    slide: function (event, ui) {
+        polangle = ui.value;
+        update();
+        $("#polangle").html(ui.value+"&deg;");
+    }
+});
+
+$(function() {
+    $( "#polenabled" ).button().click(function() {
+        polfilter = $("input:checkbox[id=polenabled]:checked").val();
+        if (polfilter)
+            $("#polen").text("Disable");
+        else
+            $("#polen").text("Enable");
+        update();
+    });
+
+    $( "#filters" ).buttonset();
+
+    $( "#filters input[type=radio]" ).change(function() {
+        if (this.value === 'none') {
+            red = true;
+            green = true;
+            blue = true;
+        } else if (this.value === 'red') {
+            red = true;
+            green = false;
+            blue = false;
+        } else if (this.value === 'green') {
+            red = false;
+            green = true;
+            blue = false;
+        } else if (this.value === 'blue') {
+            red = false;
+            green = false;
+            blue = true;
+        }
+        
+        update();
+    });
+});
+
+function draw() {
+    
+    update();
+}   
+
+update();
+
+</script>
+</body>
+
+</html>
