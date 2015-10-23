@@ -5,17 +5,17 @@
 @import url(http://fonts.googleapis.com/css?family=Merriweather:300,300italic,400,400italic,700,700italic);
 @import url(https://fonts.googleapis.com/css?family=Arimo:400,700);
 @import url(https://fonts.googleapis.com/css?family=Inconsolata);
-@import url(https://fonts.googleapis.com/css?family=Architects+Daughter);
+@import url(https://fonts.googleapis.com/css?family=Oswald:700,400,300);
 
-$primary-color: #9DACB5;
+$primary-color: #EEE;
 $alpha-color: #C7DBA3;
 $beta-color: #B1A4BD;
 $complementary-color: #d99e4b;
 
-$white-background: #edead9;
+$white-background: #FFF;
 
-$secondary-color: $complementary-color;
-$adjacent-color: $beta-color;
+$secondary-color: #A40;
+$adjacent-color: #48C;
 
 body 
 { 
@@ -23,7 +23,7 @@ body
     padding-bottom: 40px;  
     font-family: 'Arimo', Helvetica, sans-serif;//'Merriweather', Georgia, Times; 
     font-size: 16px; 
-    background-image: url("../img/bg2.jpg");
+    //background-image: url("../img/bg2.jpg");
     //background-repeat: no-repeat;
     background-color: $primary-color;
 }
@@ -31,20 +31,22 @@ body
 .container
 {
     background-color: $white-background;
-    background-image: url("../img/bgwhite.jpg");
-    border: 2px solid darken($primary-color, 20%);
+    //background-image: url("../img/bgwhite.jpg");
+    //border: 2px solid darken($primary-color, 20%);
     border-radius: 10px;
 
 }
 
 .titlename
 {
-    font-family: 'Architects Daughter', Helvetica, sans-serif;
+    font-family: 'Oswald', Helvetica, sans-serif;
     font-size: 125%;
+    font-weight: 300;
+    letter-spacing: 2px;
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 { 
-    color: darken($secondary-color, 20%);
+    color: $secondary-color;
     font-family: 'Libre Baskerville', Georgia, Times; 
     font-weight: 700;
 }
@@ -55,12 +57,12 @@ blockquote p { font-size: 16px; line-height: 1.6em; }
 .header
 {
     padding: 10px 10px 0px;
-    border-bottom: 2px solid lighten($secondary-color, 10%);
+    border-bottom: 2px solid $secondary-color;
 }
 
 .footer
 {
-    border-top: 2px solid lighten($secondary-color, 10%);
+    border-top: 2px solid $secondary-color;
 }
 
 .header, .footer, .header h3 
