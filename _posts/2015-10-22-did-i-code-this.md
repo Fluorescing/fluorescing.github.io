@@ -12,3 +12,7 @@ tags: default
 &emsp;So it would have been an awesome little demo to post here.  However, I wanted to talk about how it worked, and I forgot about the method I used.  If I were to recreate it today, my intuition would have been to use Jones Calculus---matrix calculations for optics---to compute the expected result.  I, instead, used an obscure method from my Optics textbook (that I've since found again) to compute the results.
 
 &emsp;I really did get the sense that I did not write this code initially.  It had been years and it didn't even look like my coding style.  But the simulation appears to be correct, and I'm still thinking about posting it once I rewrite it using math.js (a mathematics library for Javascript), to simplify the code.  Expect it soon.
+
+### Update 1 (23 Oct 2015)
+
+&emsp;Going over the code in depth, I've discovered that the fact it worked correctly was a fluke.  There were small little errors that had no effect on overall results.  They have been fixed and simplified, and the demo has been posted to [here](../../../../../demo/syrup.html).  Also, I've discovered that math.js is quite slow compared to what I've been using, so I'm not switching over.
