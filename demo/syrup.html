@@ -18,20 +18,18 @@
 <canvas id="canvas" class="demo-canvas" width="200" height="16"></canvas>
 
 <h4>Front Polarization Filter: </h4>
-<p><input type="checkbox" id="polenabled" checked="enabled" /><label for="polenabled" id="polenabledlabel"><span id="polen">Disable</span></label></p>
+<p><input type="checkbox" id="polenabled" checked /><label for="polenabled" id="polenabledlabel"><span id="polen">Disable</span></label></p>
 
 <h4>Polarization Angle: <span id="polangle">90&deg;</span></h4>
-<p><div id="slider"></div></p>
+<div id="slider"></div>
 
 <h4>Color Filters:</h4>
-<p>
 <div id="filters">
-  <input type="radio" name="filter" id="none" value="none" /><label id="nl" for="none">None</label>
+  <input type="radio" name="filter" id="none" value="none" checked/><label id="nl" for="none">None</label>
   <input type="radio" name="filter" id="red" value="red" /><label id="rl" for="red">Red</label>
   <input type="radio" name="filter" id="green" value="green" /><label id="gl" for="green">Green</label>
   <input type="radio" name="filter" id="blue" value="blue" /><label id="bl" for="blue">Blue</label>
 </div>
-</p>
 
 <h4>Description:</h4>
 <p>&emsp;This simulation is based on a demo I once saw during a Optics lecture back in 2011.  The demonstration involved placing a cylinder of white corn syrup between two linear polarizers.</p>
