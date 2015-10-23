@@ -14,7 +14,6 @@
 {% include header.html %}
 
 <h2>Polarized Light and Corn Syrup Demo</h2>
-<h3>by Shane Stahlheber</h3>
 
 <canvas id="canvas" class="demo-canvas" width="200" height="16"></canvas>
 
@@ -34,12 +33,17 @@
 </div>
 </p>
 
+<h4>Description:</h4>
+<p>&emsp;This simulation is based on a demo I once saw during a Optics lecture back in 2011.  The demonstration involved placing a cylinder of white corn syrup between two linear polarizers.</p>
+<p>&emsp;Light that shows through the back polarizer is rotated when traveling through the corn syrup.  So even if the two polarizers are crossed, light that passes through the corn syrup could also pass through the second polarizer.</p>
+<p>&emsp;Try adjusting the front polarization angle. The rainbow-like colors come from the fact that the amount of rotation depends on the wavelength of light.  That is, red light gets rotated by a different amount than blue light or green light.</p>
+
 {% include footer.html %}
 </div> <!-- /container -->
 
 {% include scripts.html %}
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript"></script>
-<script src="math.js" type="text/javascript"></script>
+
 <script type="text/javascript" src="Functional.js"></script>
 <script type="text/javascript" src="Complex.js"></script>
 <script type="text/javascript" src="CVec.js"></script>

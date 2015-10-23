@@ -9,12 +9,10 @@
 
 function SyrupDemo(opts) {
 	this.WIDTH = 200;
-	this.samples = 8;
+	this.samples = 1;
 	this.polarize = true;
 
 	this.bimage = new Array(this.WIDTH);
-
-	//this.angle = 90;
 }
 
 SyrupDemo.Polarizer = function (v, angle) {
@@ -35,52 +33,37 @@ SyrupDemo.Rotator = function (v, phase) {
 	return new CVec([Complex.sub(
 						Complex.mul(v.x(), cos),
 						Complex.mul(v.y(), sin)),
-					Complex.sub(
+					Complex.add(
 						Complex.mul(v.x(), sin),
 						Complex.mul(v.y(), cos))]);
-}
-
-SyrupDemo.Retarder = function (v, epsx, epsy) {
-	var expx = Complex.exp(new Complex(0, epsx));
-	var expy = Complex.exp(new Complex(0, epsy));
-	return new CVec([Complex.mul(v.x(), expx), Complex.mul(v.y(), expy)]);
 }
 
 SyrupDemo.prototype.TestRed = function (rotation, polangle) {
 	var sample = 0.0;
 	
 	// Initial Wave (Horizontally Polarized)
-	var L = new CVec([new Complex(1/Math.sqrt(2), 0), new Complex(0, 1/Math.sqrt(2))]);
-	var R = new CVec([new Complex(0, 1/Math.sqrt(2)), new Complex(1/Math.sqrt(2), 0)]);
-
-	R = SyrupDemo.Retarder(R, -90.0*Math.PI/180.0, -90.0*Math.PI/180.0);
+    var norm = 1.0 / Math.sqrt(2.0);
+	var L = new CVec([new Complex(norm, 0), new Complex(0, norm)]);
+    var R = new CVec([new Complex(norm, 0), new Complex(0, -norm)]);
 
 	// Rotate Wave
 	L = SyrupDemo.Rotator(L, rotation);
 	R = SyrupDemo.Rotator(R, rotation);
-	
+
 	// Final Polarizer (Vertical Polarizer)
 	if (this.polarize)
 	{
 		L = SyrupDemo.Polarizer(L, polangle);
 		R = SyrupDemo.Polarizer(R, polangle);
 	}
-	
-	// take many samples to find approximate intensity
-	for (var i = 0; i < this.samples; i++) {
-		
-		// Progress the wave by a small amount
-		var dt = Math.PI*2.0/this.samples;
-		var phase = i*dt;
-		var nL = SyrupDemo.Retarder(L, phase, phase);
-		var nR = SyrupDemo.Retarder(R, phase, phase);
-		
-		// find the sum of the L- and R-state waves
-		var P = CVec.add(nL, nR);
-		
-		// accumulate intensity
-		sample += Math.sqrt(P.y().real()*P.y().real() + P.x().real()*P.x().real());
-	}
+
+    var V = CVec.add(L, R);
+
+    // get the intensity
+    sample = Math.sqrt(V.y().real()*V.y().real() 
+        + V.y().imaginary()*V.y().imaginary()
+        + V.x().real()*V.x().real() 
+        + V.x().imaginary()*V.x().imaginary());
 	
 	return sample;
 }
@@ -105,11 +88,13 @@ SyrupDemo.prototype.update = function (ctx, angle, polfilter, redfilter, greenfi
 		// Bottle boundaries
 		if (x > 2.0*radius && x < 4.0*radius)
 		{
-			var xprime = x - 3.0*radius;
-			distance = 2.0*Math.sqrt(radius*radius - xprime*xprime);
-			brightness = distance / (2.0*radius);
-
-			// color of the syrup (yellowish)
+            // find the distance to travel through the syrup
+			var xc = x - 3.0*radius;
+			distance = 2.0*Math.sqrt(radius*radius - xc*xc);
+			
+			// color of the syrup (yellowish and darker around edges)
+            // this is for aesthetic purposes
+            brightness = distance / (2.0*radius);
 			rb = 0.9;
 			gb = 0.9;
 			bb = 0.72;
@@ -119,12 +104,26 @@ SyrupDemo.prototype.update = function (ctx, angle, polfilter, redfilter, greenfi
 		distance *= 2.5/(2.0*radius);
 
 		// Calculate colors
-		//  - Rotation is dependent on the distance traveled through
-		//      the syrup.
-		//  - The edges will dim to mimic the round shape of a bottle.
-		var red = this.TestRed(distance*Math.PI/(180.0/30.815)*(655.0/640.0), angle);
-		var green = this.TestRed(distance*Math.PI/(180.0/30.815)*(655.0/510.0), angle);
-		var blue = this.TestRed(distance*Math.PI/(180.0/30.815)*(655.0/440.0), angle);
+		//  - Rotation is dependent on the distance traveled through the syrup.
+
+        var delta_n = 3.87e-6;
+        var distance_nm = distance * 2.54e+7;
+
+        // take a couple samples increased visual accuracy
+        var red = this.TestRed(distance_nm * Math.PI * delta_n / 640.0, angle);
+        red += this.TestRed(distance_nm * Math.PI * delta_n / 610.0, angle);
+        red += this.TestRed(distance_nm * Math.PI * delta_n / 670.0, angle);
+        red /= 3.0;
+
+        var green = this.TestRed(distance_nm * Math.PI * delta_n / 510.0, angle);
+        green += this.TestRed(distance_nm * Math.PI * delta_n / 490.0, angle);
+        green += this.TestRed(distance_nm * Math.PI * delta_n / 530.0, angle);
+        green /= 3.0;
+
+        var blue = this.TestRed(distance_nm * Math.PI * delta_n / 440.0, angle);
+        blue += this.TestRed(distance_nm * Math.PI * delta_n / 410.0, angle);
+        blue += this.TestRed(distance_nm * Math.PI * delta_n / 470.0, angle);
+        blue /= 3.0;
 
 		if (!redfilter)
 			red *= 0;
@@ -132,32 +131,17 @@ SyrupDemo.prototype.update = function (ctx, angle, polfilter, redfilter, greenfi
 			green *= 0;
 		if (!bluefilter)
 			blue *= 0;
-	
-		/*switch (filterChoice) {
-		case 1:
-			green = 0;
-			blue = 0;
-			break;
-		case 2:
-			red = 0;
-			blue = 0;
-			break;
-		case 3:
-			red = 0;
-			green = 0;
-			break;
-		}*/
 
-		red *= brightness*rb*1.5;
-		green *= brightness*gb*1.5;
-		blue *= brightness*bb*1.5;
+		red *= brightness*rb;
+		green *= brightness*gb;
+		blue *= brightness*bb;
 
 		// Draw vertical bars
 		var barwidth = 200/this.WIDTH;
 		ctx.fillStyle = "rgb(" + Math.floor(255*red/2/this.samples) + "," +
 								 Math.floor(255*green/2/this.samples) + "," +
 								 Math.floor(255*blue/2/this.samples) + ")";
-		ctx.fillRect (x*barwidth, 0, x*barwidth+barwidth, 16);
+		ctx.fillRect(x*barwidth, 0, x*barwidth+barwidth, 16);
 	}
 }
 
