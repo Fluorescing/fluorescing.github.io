@@ -35,13 +35,21 @@
 <p>&emsp;This simulation is based on a demo I once saw during a Optics lecture back in 2011.  The demonstration involved placing a cylinder of white corn syrup between two linear polarizers.</p>
 <p>&emsp;Light that shows through the back polarizer is rotated when traveling through the corn syrup.  So even if the two polarizers are crossed, light that passes through the corn syrup could also pass through the second polarizer.</p>
 <p>&emsp;Try adjusting the front polarization angle. The rainbow-like colors come from the fact that the amount of rotation depends on the wavelength of light.  That is, red light gets rotated by a different amount than blue light or green light.</p>
+<h4>Mathematics:</h4>
+<p>&emsp;The program starts by assuming the light has already passed through the first polarizer.  The initial state, \(\left|\psi_0\right\rangle = \left|H\right\rangle\), is horizontally polarized light.  The polarized light is then rotated as it passes through the corn syrup according to $$\Delta\theta = \frac{L\pi\Delta n}{\lambda}~,$$ where \(\Delta\theta\) is the amount of rotation, \(L\) is the distance travelled through the medium, \(\Delta n\) is the difference in refractive index for \(\mathcal{L}\)-state and \(\mathcal{R}\)-state light in the medium, and \(\lambda\) is the wavelength of light passing through.</p>
+<p>&emsp;We rotate the light using the following matrix transformation:$$J_{ROT}(\Delta\theta)=\begin{bmatrix}\cos \Delta\theta & \sin \Delta\theta\\ -\sin \Delta\theta & \cos \Delta\theta\end{bmatrix}~.$$</p>
+<p>&emsp;After rotating the light, we pass it through an abitrarily rotated linear polarizer represented by the matrix transformation:$$J_{LP}(\alpha)=\begin{bmatrix}\cos^2 \alpha & \sin\alpha\cos\alpha\\ \sin\alpha\cos\alpha & \sin^2 \alpha\end{bmatrix}~,$$ where \(\alpha\) is the arbitrary rotation of the second linear polarizer.</p>
+<p>&emsp;The final state \(\left|\psi\right\rangle\) is therefore $$\left|\psi\right\rangle = J_{LP}(\alpha)\cdot J_{ROT}(\Delta \theta) \left|H\right\rangle ~,$$ and the intensity of light is $$I = \left\langle\psi\right.\left|\psi\right\rangle~.$$</p>
+<p>&emsp;If you look at the actual code, you will notice a final square root at the end of the calculations.  This is due to how light intensity is stored in a computer, or displayed on the screen.  For more information about why this is, I'd recommend watching this MinutePhysics video <a href="https://youtu.be/LKnqECcg6Gw" title="Computer Color is Broken">here</a>.</p>
 
 {% include footer.html %}
 </div> <!-- /container -->
 
 {% include scripts.html %}
 <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js" type="text/javascript"></script>
-
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 <script type="text/javascript" src="Functional.js"></script>
 <script type="text/javascript" src="Complex.js"></script>
 <script type="text/javascript" src="CVec.js"></script>

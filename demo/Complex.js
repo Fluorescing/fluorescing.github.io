@@ -60,13 +60,13 @@ Complex.reciprocal = function (a) {
 	return new Complex(a.re / scale, -a.im / scale);
 }
 
-Complex.prototype.real = function () {
+/*Complex.prototype.real = function () {
 	return this.re;
 }
 
 Complex.prototype.imaginary = function () {
 	return this.im;
-}
+}*/
 
 Math.sinh = function(a) {
 	return 0.5*(Math.exp(a) - Math.exp(-a));

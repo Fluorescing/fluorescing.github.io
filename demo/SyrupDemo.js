@@ -9,7 +9,6 @@
 
 function SyrupDemo(opts) {
 	this.WIDTH = 200;
-	this.samples = 1;
 	this.polarize = true;
 
 	this.bimage = new Array(this.WIDTH);
@@ -30,10 +29,10 @@ SyrupDemo.Polarizer = function (v, angle) {
 SyrupDemo.Rotator = function (v, phase) {
 	var cos = new Complex(Math.cos(phase), 0);
 	var sin = new Complex(Math.sin(phase), 0);
-	return new CVec([Complex.sub(
+	return new CVec([Complex.add(
 						Complex.mul(v.x(), cos),
 						Complex.mul(v.y(), sin)),
-					Complex.add(
+					Complex.sub(
 						Complex.mul(v.x(), sin),
 						Complex.mul(v.y(), cos))]);
 }
@@ -43,27 +42,20 @@ SyrupDemo.prototype.TestRed = function (rotation, polangle) {
 	
 	// Initial Wave (Horizontally Polarized)
     var norm = 1.0 / Math.sqrt(2.0);
-	var L = new CVec([new Complex(norm, 0), new Complex(0, norm)]);
-    var R = new CVec([new Complex(norm, 0), new Complex(0, -norm)]);
+    var H = new CVec([new Complex(1, 0), new Complex(0, 0)])
 
 	// Rotate Wave
-	L = SyrupDemo.Rotator(L, rotation);
-	R = SyrupDemo.Rotator(R, rotation);
+    H = SyrupDemo.Rotator(H, rotation);
 
 	// Final Polarizer (Vertical Polarizer)
 	if (this.polarize)
 	{
-		L = SyrupDemo.Polarizer(L, polangle);
-		R = SyrupDemo.Polarizer(R, polangle);
+        H = SyrupDemo.Polarizer(H, polangle);
 	}
 
-    var V = CVec.add(L, R);
-
     // get the intensity
-    sample = Math.sqrt(V.y().real()*V.y().real() 
-        + V.y().imaginary()*V.y().imaginary()
-        + V.x().real()*V.x().real() 
-        + V.x().imaginary()*V.x().imaginary());
+    sample = Math.sqrt(H.y().re*H.y().re + H.y().im*H.y().im
+                     + H.x().re*H.x().re + H.x().im*H.x().im);
 	
 	return sample;
 }
@@ -138,9 +130,9 @@ SyrupDemo.prototype.update = function (ctx, angle, polfilter, redfilter, greenfi
 
 		// Draw vertical bars
 		var barwidth = 200/this.WIDTH;
-		ctx.fillStyle = "rgb(" + Math.floor(255*red/2/this.samples) + "," +
-								 Math.floor(255*green/2/this.samples) + "," +
-								 Math.floor(255*blue/2/this.samples) + ")";
+		ctx.fillStyle = "rgb(" + Math.floor(255*red/2) + "," +
+								 Math.floor(255*green/2) + "," +
+								 Math.floor(255*blue/2) + ")";
 		ctx.fillRect(x*barwidth, 0, x*barwidth+barwidth, 16);
 	}
 }
