@@ -37,7 +37,7 @@ SyrupDemo.Rotator = function (v, phase) {
 						Complex.mul(v.y(), cos))]);
 }
 
-SyrupDemo.prototype.TestRed = function (rotation, polangle) {
+SyrupDemo.prototype.DoSimulation = function (rotation, polangle) {
 	var sample = 0.0;
 	
 	// Initial Wave (Horizontally Polarized)
@@ -102,19 +102,19 @@ SyrupDemo.prototype.update = function (ctx, angle, polfilter, redfilter, greenfi
         var distance_nm = distance * 2.54e+7;
 
         // take a couple samples increased visual accuracy
-        var red = this.TestRed(distance_nm * Math.PI * delta_n / 640.0, angle);
-        red += this.TestRed(distance_nm * Math.PI * delta_n / 610.0, angle);
-        red += this.TestRed(distance_nm * Math.PI * delta_n / 670.0, angle);
+        var red = this.DoSimulation(distance_nm * Math.PI * delta_n / 640.0, angle);
+        red += this.DoSimulation(distance_nm * Math.PI * delta_n / 610.0, angle);
+        red += this.DoSimulation(distance_nm * Math.PI * delta_n / 670.0, angle);
         red /= 3.0;
 
-        var green = this.TestRed(distance_nm * Math.PI * delta_n / 510.0, angle);
-        green += this.TestRed(distance_nm * Math.PI * delta_n / 490.0, angle);
-        green += this.TestRed(distance_nm * Math.PI * delta_n / 530.0, angle);
+        var green = this.DoSimulation(distance_nm * Math.PI * delta_n / 510.0, angle);
+        green += this.DoSimulation(distance_nm * Math.PI * delta_n / 490.0, angle);
+        green += this.DoSimulation(distance_nm * Math.PI * delta_n / 530.0, angle);
         green /= 3.0;
 
-        var blue = this.TestRed(distance_nm * Math.PI * delta_n / 440.0, angle);
-        blue += this.TestRed(distance_nm * Math.PI * delta_n / 410.0, angle);
-        blue += this.TestRed(distance_nm * Math.PI * delta_n / 470.0, angle);
+        var blue = this.DoSimulation(distance_nm * Math.PI * delta_n / 440.0, angle);
+        blue += this.DoSimulation(distance_nm * Math.PI * delta_n / 410.0, angle);
+        blue += this.DoSimulation(distance_nm * Math.PI * delta_n / 470.0, angle);
         blue /= 3.0;
 
 		if (!redfilter)
@@ -130,9 +130,9 @@ SyrupDemo.prototype.update = function (ctx, angle, polfilter, redfilter, greenfi
 
 		// Draw vertical bars
 		var barwidth = 200/this.WIDTH;
-		ctx.fillStyle = "rgb(" + Math.floor(255*red/2) + "," +
-								 Math.floor(255*green/2) + "," +
-								 Math.floor(255*blue/2) + ")";
+		ctx.fillStyle = "rgb(" + Math.floor(255*red) + "," +
+								 Math.floor(255*green) + "," +
+								 Math.floor(255*blue) + ")";
 		ctx.fillRect(x*barwidth, 0, x*barwidth+barwidth, 16);
 	}
 }
