@@ -3,3 +3,65 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/library.js"></script>
 <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+<script type="text/javascript">
+
+function SetSerif()
+{
+    $('body').css({
+        'font-family': '"Libre Baskerville", Georgia, Times'
+    });
+
+    $('h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6').css({
+        'font-family': '"Libre Baskerville", Georgia, Times'
+    });
+
+    document.cookie="font=serif; path=/";
+}
+
+function SetSans()
+{
+    $('body').css({
+        'font-family': 'Arimo, Helvetica, sans-serif'
+    });
+
+    $('h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6').css({
+        'font-family': 'Arimo, Helvetica, sans-serif'
+    });
+
+    document.cookie="font=sans; path=/";
+}
+
+function SetFont(font)
+{
+
+    switch (font) {
+        case 'serif':
+            SetSerif();
+            break;
+        case 'sans':
+            SetSans();
+            break;
+        default:
+            console.log('Invalid font type');
+            break;
+    }
+    return 0;
+}
+
+function GetCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+
+fonttype = GetCookie('font');
+
+SetFont(fonttype);
+
+
+</script>

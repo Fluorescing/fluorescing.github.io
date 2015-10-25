@@ -1,4 +1,14 @@
 <div class="header">
+<div class="dropdown pull-right">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    Font
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <li><a href="javascript:void(0);" onclick="SetFont('serif');">Serif</a></li>
+    <li><a href="javascript:void(0);" onclick="SetFont('sans');">Sans-Serif</a></li>
+  </ul>
+</div>
 
 <ul class="nav nav-pills pull-right">
 <li class="{{ page.cv }}"><a href="/cv" title="CV">CV</a></li>
@@ -7,5 +17,7 @@
 </ul>
 
 <h3 class="text-muted"><a class="titlename" href="/">Shane Stahlheber</a></h3>
+
+
 
 </div> <!-- /header -->
