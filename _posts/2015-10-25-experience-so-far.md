@@ -3,7 +3,7 @@ layout: post
 title: My experience so far
 tags: default
 ---
-&emsp;I have been working on this website for a little over a week now.  I have found the experience mixed in terms of difficulty.  I was, however, lucky to find a good template from which to base this site---thanks to Jonathan McGlone.  The difficult part was in trying to make it my own.
+<div markdown="1" style="text-align: justify">&emsp;I have been working on this website for a little over a week now.  I have found the experience mixed in terms of difficulty.  I was, however, lucky to find a good template from which to base this site---thanks to Jonathan McGlone.  The difficult part was in trying to make it my own.
 
 ### Theme: Aesthetics and Readability
 
@@ -24,3 +24,4 @@ As it stands, I'm still learning HTML5 as I go along, which includes CSS and Jav
 ### Overall
 
 &emsp;I'm happy with what I've created thus far, and I'm also content with the platform I chose to develop it on.  It has been more difficult for me to think of things to write about than to actually build the website.  Hopefully I will start to bring more content after a while, once I get used writing more.
+</div>
