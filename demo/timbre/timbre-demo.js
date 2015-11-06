@@ -56,11 +56,12 @@ var Node = (function() {
 })();
 
 var root, next;
-next = new Node([0.0, 0.0]);
-next = next.after([1.0, 0.05]);
-next = next.after([0.2, 0.3]);
-next = next.after([0.2, 0.5]);
-next = next.after([0.0, 0.8]);
+next = new Node([0.0, 0.0, 'linear']);
+next = next.after([1.0, 0.05, 'linear']);
+next = next.after([0.2, 0.3, 'exponential']);
+next = next.after([0.2, 0.4, 'linear']);
+next = next.after([0.25, 0.42, 'linear']);
+next = next.after([0.0, 0.55, 'linear']);
 root = next.root();
 
 for (var iter = root; iter; iter = iter.child) {
@@ -203,22 +204,58 @@ function redrawEnvelopeCanvas(canvas) {
     ctx.strokeStyle = "#808080";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(0, 90);
-    ctx.lineTo(720, 90);
+    ctx.moveTo(0, 170);
+    ctx.lineTo(720, 170);
     ctx.moveTo(60, 0);
     ctx.lineTo(60, 180);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#808080";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, -Math.sqrt(0.1) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.1) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.2) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.2) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.3) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.3) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.4) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.4) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.5) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.5) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.6) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.6) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.7) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.7) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.8) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.8) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(0.9) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(0.9) * 160 + 170);
+    ctx.moveTo(0, -Math.sqrt(1) * 160 + 170);
+    ctx.lineTo(720, -Math.sqrt(1) * 160 + 170);
     ctx.stroke();
 
     ctx.strokeStyle = "#FFFFFF";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(0, 90);
+    ctx.moveTo(0, 170);
+    var lx = 0;
+    var ly = 170;
     for (var iter = root; iter; iter = iter.child) {
         var x = iter.value[1] * 360 + 60;
-        var y = -iter.value[0] * 60 + 90;
-        ctx.lineTo(x, y);
+        var y = -Math.sqrt(iter.value[0]) * 160 + 170;
+
+        if (iter.value[2] == 'exponential') {
+            ctx.quadraticCurveTo(lx*0.666 + x*0.333, y, x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+        
+        lx = x;
+        ly = y;
+        
     }
-    ctx.lineTo(720, 90);
+    ctx.lineTo(720, 170);
     ctx.stroke();
 }
 
@@ -324,11 +361,20 @@ function playNote() {
 
     // setup envelope
     volume.gain.cancelScheduledValues(now);
-    volume.gain.linearRampToValueAtTime(0.0, now);
-    volume.gain.linearRampToValueAtTime(1.0, now + 0.05);
-    volume.gain.exponentialRampToValueAtTime(0.2, now + 0.3);
-    volume.gain.linearRampToValueAtTime(0.2, now + 0.5);
-    volume.gain.linearRampToValueAtTime(0.0, now + 0.8);
+
+    for (var iter = root; iter; iter = iter.child) {
+        if (iter.value[2] == 'exponential') {
+            volume.gain.exponentialRampToValueAtTime(iter.value[0], now + iter.value[1]);
+        } else {
+            volume.gain.linearRampToValueAtTime(iter.value[0], now + iter.value[1]);
+        }
+    }
+
+    // volume.gain.linearRampToValueAtTime(0.0, now);
+    // volume.gain.linearRampToValueAtTime(1.0, now + 0.05);
+    // volume.gain.exponentialRampToValueAtTime(0.2, now + 0.3);
+    // volume.gain.linearRampToValueAtTime(0.2, now + 0.5);
+    // volume.gain.linearRampToValueAtTime(0.0, now + 0.8);
 }
 
 $( main );
