@@ -15,5 +15,5 @@ tags: default
 
 ### Update 1 (23 Oct 2015)
 
-&emsp;Going over the code in depth, I've discovered that the fact it worked correctly was a fluke.  There were small little errors that had no effect on overall results.  They have been fixed and simplified, and the demo has been posted to [here](../../../../../demo/syrup.html).  Also, I've discovered that math.js is quite slow compared to what I've been using, so I'm not switching over.
+&emsp;Going over the code in depth, I've discovered that the fact it worked correctly was a fluke.  There were small little errors that had no effect on overall results.  They have been fixed and simplified, and the demo has been posted to [here](../../../../../demo/syrup/syrup.html).  Also, I've discovered that math.js is quite slow compared to what I've been using, so I'm not switching over.
 </div>
