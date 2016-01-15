@@ -57,11 +57,11 @@ var Node = (function() {
 
 var root, next;
 next = new Node([0.0, 0.0, 'linear']);
-next = next.after([1.0, 0.05, 'linear']);
+next = next.after([1.0, 0.1, 'linear']);
 next = next.after([0.2, 0.3, 'exponential']);
-next = next.after([0.2, 0.4, 'linear']);
-next = next.after([0.25, 0.42, 'linear']);
-next = next.after([0.0, 0.55, 'linear']);
+next = next.after([0.2, 0.6, 'linear']);
+next = next.after([0.25, 0.62, 'linear']);
+next = next.after([0.0, 0.7, 'linear']);
 root = next.root();
 
 for (var iter = root; iter; iter = iter.child) {

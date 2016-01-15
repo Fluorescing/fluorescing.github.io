@@ -23,6 +23,9 @@ tags: default
 
 </div> 
 
+
+*Link to demo: [A Demonstration of Timbre](../../../../../demo/timbre)*
+
 --------
 
 **References:**
