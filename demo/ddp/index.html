@@ -32,23 +32,55 @@
   </g>
 </svg>
 
-<span id="result"></span>
+<canvas id="graph" width="500" height="300"></canvas>
 
 <script>
 
-delta_t = 1/120.0;
+var c = document.getElementById("graph");
+var ctx = c.getContext("2d");
 
-pi = 3.14159265359;
-omega = 2.0*pi;
-gamma = 1.105;
-omega0 = 1.5 * omega;
-beta = omega0 / 4.0;
+ctx.translate(0.5, 0.5);
 
-angle = -pi/2.0;
-velocity = 0.0
+ctx.beginPath();
+ctx.moveTo(50, 250);
+ctx.lineTo(500, 250);
+ctx.moveTo(50, 250-40);
+ctx.lineTo(500, 250-40);
+ctx.moveTo(50, 250-80);
+ctx.lineTo(500, 250-80);
+ctx.moveTo(50, 250-120);
+ctx.lineTo(500, 250-120);
+ctx.moveTo(50, 250-160);
+ctx.lineTo(500, 250-160);
+//ctx.moveTo(50, 250-200);
+//ctx.lineTo(500, 250-200);
+ctx.moveTo(50, 250-240);
+ctx.lineTo(500, 250-240);
+ctx.strokeStyle = "#BBBBBB";
+ctx.stroke();
 
-angle2 = -pi/2.0 + 0.0001;
-velocity2 = 0.0
+ctx.beginPath();
+ctx.moveTo(50, 0);
+ctx.lineTo(50, 250);
+ctx.moveTo(50, 250-200)
+ctx.lineTo(500, 250-200);
+ctx.strokeStyle = "#000000";
+ctx.lineWidth = 2.0;
+ctx.stroke();
+
+var delta_t = 1/240.0;
+
+var pi = 3.14159265359;
+var omega = 2.0*pi;
+var gamma = 1.105;
+var omega0 = 1.5 * omega;
+var beta = omega0 / 4.0;
+
+var angle = -pi/2.0;
+var velocity = 0.0
+
+var angle2 = -pi/2.0 + 0.0001;
+var velocity2 = 0.0
 
 f = function(vx, x, t) {
     return gamma*(omega0*omega0)*Math.cos(omega*t) - 2.0*beta*vx - (omega0*omega0)*Math.sin(x);
@@ -58,8 +90,10 @@ g = function(vx, x, t) {
     return vx;
 }
 
-time = 0.0;
+var y1 = 0.0;
+var time = 0.0;
 test = function() {
+
     $("#pendulum").attr("transform", "rotate("+(angle*180.0/pi)+",255,255)");
     $("#bob").attr("transform", "rotate("+(angle*180.0/pi)+",255,255)");
     $("#pendulum2").attr("transform", "rotate("+(angle2*180.0/pi)+",255,255)");
@@ -100,9 +134,21 @@ test = function() {
     velocity2 = velocity2 + k0/6 + k1/3 + k2/3 + k3/6;
     angle2 = angle2 + l0/6 + l1/3 + l2/3 + l3/6;
 
+    var x0 = time * 20;
+    var x1 = (time + delta_t) * 20;
+
+    var y0 = y1;
+    y1 = Math.log10(Math.abs(angle-angle2)) + 5;
+    y1 = y1*40;
+
+    ctx.beginPath();
+    ctx.moveTo(50 + x0, 250 - y0);
+    ctx.lineTo(50 + x1, 250 - y1);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#0000FF";
+    ctx.stroke();
 
     time = time + delta_t;
-
 }
 
 setInterval(test, 17);
