@@ -1,0 +1,113 @@
+<html>
+<head>
+    <title>Driven Damped Pendulum</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+</head>
+<body>
+
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500px" height="500px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve">
+<rect id="pendulum" x="250" y="250" rx="5" ry="5" height="200" width="10" fill="blue"/>
+<circle id="bob" cx="255" cy="450" r="30" fill="blue"/>
+<rect id="pendulum2" x="250" y="250" rx="5" ry="5" height="200" width="10" />
+<circle id="bob2" cx="255" cy="450" r="30" />
+<g
+     id="layer1"
+     transform="translate(5,-547.36214)">
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:.5"
+       d="m 238.64854,787.55065 c -6.85186,2.35195 -10.6903,9.2706 -10.07628,14.84924 0.90246,8.19924 5.76426,11.68224 9.32812,14.09036 -0.12355,-1.79542 -0.18272,-3.89014 -0.35355,-5.83363"
+       id="leftdrive1" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.5"
+       d="m 238.23433,816.86617 c -1.82899,0.10823 -4.24196,-0.15899 -5.62653,0.0928"
+       id="leftdrive2" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 260.7606,787.88478 c 6.85186,2.35195 10.6903,9.2706 10.07628,14.84924 -0.90246,8.19924 -5.76426,11.68224 -9.32812,14.09036 0.12355,-1.79542 0.18272,-3.89014 0.35355,-5.83363"
+       id="rightdrive1" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 261.17481,817.2003 c 1.82899,0.10823 4.24196,-0.15899 5.62653,0.0928"
+       id="rightdrive2" />
+  </g>
+</svg>
+
+<span id="result"></span>
+
+<script>
+
+delta_t = 1/120.0;
+
+pi = 3.14159265359;
+omega = 2.0*pi;
+gamma = 1.105;
+omega0 = 1.5 * omega;
+beta = omega0 / 4.0;
+
+angle = -pi/2.0;
+velocity = 0.0
+
+angle2 = -pi/2.0 + 0.0001;
+velocity2 = 0.0
+
+f = function(vx, x, t) {
+    return gamma*(omega0*omega0)*Math.cos(omega*t) - 2.0*beta*vx - (omega0*omega0)*Math.sin(x);
+}
+
+g = function(vx, x, t) {
+    return vx;
+}
+
+time = 0.0;
+test = function() {
+    $("#pendulum").attr("transform", "rotate("+(angle*180.0/pi)+",255,255)");
+    $("#bob").attr("transform", "rotate("+(angle*180.0/pi)+",255,255)");
+    $("#pendulum2").attr("transform", "rotate("+(angle2*180.0/pi)+",255,255)");
+    $("#bob2").attr("transform", "rotate("+(angle2*180.0/pi)+",255,255)");
+
+    $("#leftdrive1").attr("style", "fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:"+Math.max(0, -Math.cos(omega*time)));
+    $("#leftdrive2").attr("style", "fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:"+Math.max(0, -Math.cos(omega*time)));
+    $("#rightdrive1").attr("style", "fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:"+Math.max(0, Math.cos(omega*time)));
+    $("#rightdrive2").attr("style", "fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:"+Math.max(0, Math.cos(omega*time)));
+
+    k0 = delta_t * f(velocity, angle, time);
+    l0 = delta_t * g(velocity, angle, time);
+
+    k1 = delta_t * f(velocity + k0/2, angle + l0/2, time + delta_t/2);
+    l1 = delta_t * g(velocity + k0/2, angle + l0/2, time + delta_t/2);
+
+    k2 = delta_t * f(velocity + k1/2, angle + l1/2, time + delta_t/2);
+    l2 = delta_t * g(velocity + k1/2, angle + l1/2, time + delta_t/2);
+
+    k3 = delta_t * f(velocity + k2, angle + l2, time + delta_t);
+    l3 = delta_t * g(velocity + k2, angle + l2, time + delta_t);
+
+    velocity = velocity + k0/6 + k1/3 + k2/3 + k3/6;
+    angle = angle + l0/6 + l1/3 + l2/3 + l3/6;
+
+    k0 = delta_t * f(velocity2, angle2, time);
+    l0 = delta_t * g(velocity2, angle2, time);
+
+    k1 = delta_t * f(velocity2 + k0/2, angle2 + l0/2, time + delta_t/2);
+    l1 = delta_t * g(velocity2 + k0/2, angle2 + l0/2, time + delta_t/2);
+
+    k2 = delta_t * f(velocity2 + k1/2, angle2 + l1/2, time + delta_t/2);
+    l2 = delta_t * g(velocity2 + k1/2, angle2 + l1/2, time + delta_t/2);
+
+    k3 = delta_t * f(velocity2 + k2, angle2 + l2, time + delta_t);
+    l3 = delta_t * g(velocity2 + k2, angle2 + l2, time + delta_t);
+
+    velocity2 = velocity2 + k0/6 + k1/3 + k2/3 + k3/6;
+    angle2 = angle2 + l0/6 + l1/3 + l2/3 + l3/6;
+
+
+    time = time + delta_t;
+
+}
+
+setInterval(test, 17);
+
+</script>
+
+</body>
+</html>
