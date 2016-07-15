@@ -1,7 +1,10 @@
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Double Pendulum</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/black-tie/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
@@ -26,6 +29,16 @@
                 <button id="playpause">Play/Pause</button>
                 </br></br>
                 <button id="restart">Restart</button>
+                </br></br>
+                Starting Angle 1
+                <div style="padding: 5px;">
+                    <div id="sliderangle1"></div>
+                </div>
+                </br>
+                Starting Angle 2
+                <div style="padding: 5px;">
+                    <div id="sliderangle2"></div>
+                </div>
             </center>
         </div>
     </div>
@@ -164,15 +177,22 @@ var reset = function() {
 
     drawgrid(ctx);
 
-    // Adjust pendulum rotation
-    $("#PendulumBase").attr("transform", "rotate("+(angle1*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum").attr("transform", "rotate("+((angle2-angle1)*180.0/pi)+",252.5,352.5)");
+    angle1 = $("#sliderangle1").slider("option", "value");
+    angle2 = $("#sliderangle2").slider("option", "value");
+    angle3 = angle1;
+    angle4 = angle2;
 
-    $("#PendulumBase2").attr("transform", "rotate("+(angle3*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum2").attr("transform", "rotate("+((angle4-angle3)*180.0/pi)+",252.5,352.5)");
+    // Adjust pendulum rotation
+    $("#PendulumBase").attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
+    $("#SecondPendulum").attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
+
+    $("#PendulumBase2").attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
+    $("#SecondPendulum2").attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
+
+
 }
 
-reset();
+
 
 
 f = function(t, Phi1, dPhi1, Phi2, dPhi2) {
@@ -210,11 +230,11 @@ var angle4prev;
 test = function() {
 
     // Adjust pendulum rotation
-    $("#PendulumBase").attr("transform", "rotate("+(angle1*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum").attr("transform", "rotate("+((angle2-angle1)*180.0/pi)+",252.5,352.5)");
+    $("#PendulumBase").attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
+    $("#SecondPendulum").attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
 
-    $("#PendulumBase2").attr("transform", "rotate("+(angle3*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum2").attr("transform", "rotate("+((angle4-angle3)*180.0/pi)+",252.5,352.5)");
+    $("#PendulumBase2").attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
+    $("#SecondPendulum2").attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
 
     // save previous angles
     angle1prev = angle1;
@@ -316,16 +336,16 @@ test = function() {
 
     // Pendulum path 1
     pathContext.beginPath();
-    pathContext.moveTo(250-Math.sin(angle3prev)*100-Math.sin(angle4prev)*100, 250+Math.cos(angle3prev)*100+Math.cos(angle4prev)*100);
-    pathContext.lineTo(250-Math.sin(angle3)*100-Math.sin(angle4)*100, 250+Math.cos(angle3)*100+Math.cos(angle4)*100);
+    pathContext.moveTo(250+Math.sin(angle3prev)*100+Math.sin(angle4prev)*100, 250+Math.cos(angle3prev)*100+Math.cos(angle4prev)*100);
+    pathContext.lineTo(250+Math.sin(angle3)*100+Math.sin(angle4)*100, 250+Math.cos(angle3)*100+Math.cos(angle4)*100);
     pathContext.lineWidth = 2;
     pathContext.strokeStyle = "#00FF00";
     pathContext.stroke();
     
     // Pendulum path 2
     pathContext.beginPath();
-    pathContext.moveTo(250-Math.sin(angle1prev)*100-Math.sin(angle2prev)*100, 250+Math.cos(angle1prev)*100+Math.cos(angle2prev)*100);
-    pathContext.lineTo(250-Math.sin(angle1)*100-Math.sin(angle2)*100, 250+Math.cos(angle1)*100+Math.cos(angle2)*100);
+    pathContext.moveTo(250+Math.sin(angle1prev)*100+Math.sin(angle2prev)*100, 250+Math.cos(angle1prev)*100+Math.cos(angle2prev)*100);
+    pathContext.lineTo(250+Math.sin(angle1)*100+Math.sin(angle2)*100, 250+Math.cos(angle1)*100+Math.cos(angle2)*100);
     pathContext.lineWidth = 2;
     pathContext.strokeStyle = "#FF0000";
     pathContext.stroke();
@@ -348,6 +368,34 @@ $( function () {
     $("#restart").click( function( event ) {
         reset();
     } );
+
+    $("#sliderangle1").slider({
+        orientation: "horizontal",
+        range: false,
+        min: -pi,
+        max: pi,
+        value: -pi/2,
+        step: 0.01,
+        animate: true,
+        slide: function(event, ui) {
+
+        }
+    } );
+
+    $("#sliderangle2").slider({
+        orientation: "horizontal",
+        range: false,
+        min: -pi,
+        max: pi,
+        value: -pi/2,
+        step: 0.01,
+        animate: true,
+        slide: function(event, ui) {
+
+        }
+    } );
+
+    reset();
 } );
 
 </script>
