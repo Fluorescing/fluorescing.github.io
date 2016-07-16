@@ -25,20 +25,25 @@
         <div class="pure-menu">
             <a class="pure-menu-heading" href="#">Options</a>
             <center>
-                </br>
+                <br>
                 <button id="playpause">Play/Pause</button>
-                </br></br>
+                <br><br>
                 <button id="restart">Restart</button>
-                </br></br>
+                <br><br>
                 Starting Angle 1
                 <div style="padding: 5px;">
                     <div id="sliderangle1"></div>
                 </div>
-                </br>
+                <br>
                 Starting Angle 2
                 <div style="padding: 5px;">
                     <div id="sliderangle2"></div>
                 </div>
+                <br>
+                Second Pendulum
+                <label id="second-checkbox-label" for="second-checkbox">Enabled</label>
+                <input type="checkbox" name="second-checkbox" id="second-checkbox" checked="true">
+
             </center>
         </div>
     </div>
@@ -94,15 +99,6 @@ ctx.translate(0.5, 0.5);
 drawgrid = function(ctx) {
     ctx.clearRect(0, 0, 500, 300);
 
-    ctx.font="16px Georgia";
-    ctx.fillText("1E-20", 0, 250);
-    ctx.fillText("1E-16", 0, 250-40);
-    ctx.fillText("1E-12", 0, 250-80);
-    ctx.fillText("1E-8", 0, 250-120);
-    ctx.fillText("1E-4", 0, 250-160);
-    ctx.fillText("1", 0, 250-200);
-    ctx.fillText("1E+4", 0, 250-240);
-
     ctx.beginPath();
     ctx.moveTo(50, 250);
     ctx.lineTo(500, 250);
@@ -127,6 +123,15 @@ drawgrid = function(ctx) {
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = 2.0;
     ctx.stroke();
+
+    ctx.font="16px Georgia";
+    ctx.fillText("1E-20", 0, 250);
+    ctx.fillText("1E-16", 0, 250-40);
+    ctx.fillText("1E-12", 0, 250-80);
+    ctx.fillText("1E-8", 0, 250-120);
+    ctx.fillText("1E-4", 0, 250-160);
+    ctx.fillText("1", 0, 250-200);
+    ctx.fillText("1E+4", 0, 250-240);
 }
 
 var delta_t = 1/60.0;
@@ -139,6 +144,8 @@ var gravity = 9.8;
 var L1 = 1.0;
 var L2 = 1.0;
 var mu = 1 + mass1/mass2;
+
+var secondPendulumEnabled = true;
 
 var angle1;
 var velocity1;
@@ -188,11 +195,7 @@ var reset = function() {
 
     $("#PendulumBase2").attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
     $("#SecondPendulum2").attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
-
-
 }
-
-
 
 
 f = function(t, Phi1, dPhi1, Phi2, dPhi2) {
@@ -233,9 +236,15 @@ test = function() {
     $("#PendulumBase").attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
     $("#SecondPendulum").attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
 
-    $("#PendulumBase2").attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum2").attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
-
+    if (secondPendulumEnabled) {
+        $("#PendulumBase2").attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
+        $("#SecondPendulum2").attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
+    } else {
+        $("#PendulumBase2").attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
+        $("#SecondPendulum2").attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
+    }
+    
+    
     // save previous angles
     angle1prev = angle1;
     angle2prev = angle2;
@@ -299,33 +308,43 @@ test = function() {
     // Increase time
     time = time + delta_t;
 
-    // Draw difference chart
-    var x0 = time * 8;
-    var x1 = (time + delta_t) * 8;
+    if (secondPendulumEnabled) {
+        // Draw difference chart
+        var x0 = time * 8;
+        var x1 = (time + delta_t) * 8;
 
-    var tempslide = 0;
-    while (x1 + 50 > 500) {
-        x0 -= 450;
-        x1 -= 450;
-        tempslide++;
+        var tempslide = 0;
+        while (x1 + 50 > 500) {
+            x0 -= 450;
+            x1 -= 450;
+            tempslide++;
+        }
+
+        if (slide != tempslide) {
+            drawgrid(ctx);
+        }
+
+        slide = tempslide;
+
+        var y0 = y1;
+        y1 = Math.log10(Math.abs(angle1-angle3)) + 20;
+        y1 = y1*10;
+
+        ctx.beginPath();
+        ctx.moveTo(50 + x0, 250 - y0);
+        ctx.lineTo(50 + x1, 250 - y1);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#0000FF";
+        ctx.stroke();
+
+        
+    } else {
+        if (count % 20 == 0) {
+            ctx.fillStyle = "rgba(255,255,255,1)";
+            ctx.fillRect(0,0,500,300);
+            ctx.fillStyle = "rgba(0,0,0,1)";
+        }
     }
-
-    if (slide != tempslide) {
-        drawgrid(ctx);
-    }
-
-    slide = tempslide;
-
-    var y0 = y1;
-    y1 = Math.log10(Math.abs(angle1-angle3)) + 20;
-    y1 = y1*10;
-
-    ctx.beginPath();
-    ctx.moveTo(50 + x0, 250 - y0);
-    ctx.lineTo(50 + x1, 250 - y1);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "#0000FF";
-    ctx.stroke();
 
     // Add fading to pendulum path
     if (count % 20 == 0) {
@@ -334,15 +353,17 @@ test = function() {
     }
     count++;
 
-    // Pendulum path 1
-    pathContext.beginPath();
-    pathContext.moveTo(250+Math.sin(angle3prev)*100+Math.sin(angle4prev)*100, 250+Math.cos(angle3prev)*100+Math.cos(angle4prev)*100);
-    pathContext.lineTo(250+Math.sin(angle3)*100+Math.sin(angle4)*100, 250+Math.cos(angle3)*100+Math.cos(angle4)*100);
-    pathContext.lineWidth = 2;
-    pathContext.strokeStyle = "#00FF00";
-    pathContext.stroke();
+    if (secondPendulumEnabled) {
+        // Pendulum path 2
+        pathContext.beginPath();
+        pathContext.moveTo(250+Math.sin(angle3prev)*100+Math.sin(angle4prev)*100, 250+Math.cos(angle3prev)*100+Math.cos(angle4prev)*100);
+        pathContext.lineTo(250+Math.sin(angle3)*100+Math.sin(angle4)*100, 250+Math.cos(angle3)*100+Math.cos(angle4)*100);
+        pathContext.lineWidth = 2;
+        pathContext.strokeStyle = "#00FF00";
+        pathContext.stroke();
+    }
     
-    // Pendulum path 2
+    // Pendulum path 1
     pathContext.beginPath();
     pathContext.moveTo(250+Math.sin(angle1prev)*100+Math.sin(angle2prev)*100, 250+Math.cos(angle1prev)*100+Math.cos(angle2prev)*100);
     pathContext.lineTo(250+Math.sin(angle1)*100+Math.sin(angle2)*100, 250+Math.cos(angle1)*100+Math.cos(angle2)*100);
@@ -392,6 +413,22 @@ $( function () {
         animate: true,
         slide: function(event, ui) {
 
+        }
+    } );
+
+    $( "#second-checkbox" ).checkboxradio({
+        icon: false
+    });
+
+    $( "#second-checkbox" ).on("change", function ( e ) {
+        if ($( "#second-checkbox" ).is(":checked")) {
+            $( "#second-checkbox-label" ).html("Enabled");
+            secondPendulumEnabled = true;
+            reset();
+        } else {
+            $( "#second-checkbox-label" ).html("Disabled");
+            secondPendulumEnabled = false;
+            reset();
         }
     } );
 
