@@ -1,7 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=500, initial-scale=1">
     <title>Double Pendulum</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/black-tie/jquery-ui.css">
@@ -24,7 +25,7 @@
     <div id="menu">
         <div class="pure-menu">
             <a class="pure-menu-heading" href="#">Options</a>
-            <center>
+            <div style="text-align: center;">
                 <br>
                 <button id="playpause">Play/Pause</button>
                 <br><br>
@@ -42,9 +43,9 @@
                 <br>
                 Second Pendulum
                 <label id="second-checkbox-label" for="second-checkbox">Enabled</label>
-                <input type="checkbox" name="second-checkbox" id="second-checkbox" checked="true">
+                <input type="checkbox" name="second-checkbox" id="second-checkbox" checked>
 
-            </center>
+            </div>
         </div>
     </div>
 
@@ -54,7 +55,7 @@
         </div>
 
         <div class="content">
-            <center>
+            <div style="text-align: center;">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500px" height="500px" viewBox="0 0 500 500" enable-background="new 0 0 500 500" xml:space="preserve" style="position: absolute;">
 
             <g id="PendulumBase2">
@@ -80,10 +81,10 @@
             <canvas id="path" width="500" height="500"></canvas>
 
             <canvas id="graph" width="500" height="300"></canvas>
-            </center>
+            </div>
         </div>
     </div>
-
+</div>
 
 <script>
 
@@ -95,46 +96,45 @@ var pathContext = pathCanvas.getContext("2d");
 
 ctx.translate(0.5, 0.5);
 
-
-drawgrid = function(ctx) {
+var drawgrid = function (ctx) {
     ctx.clearRect(0, 0, 500, 300);
 
     ctx.beginPath();
     ctx.moveTo(50, 250);
     ctx.lineTo(500, 250);
-    ctx.moveTo(50, 250-40);
-    ctx.lineTo(500, 250-40);
-    ctx.moveTo(50, 250-80);
-    ctx.lineTo(500, 250-80);
-    ctx.moveTo(50, 250-120);
-    ctx.lineTo(500, 250-120);
-    ctx.moveTo(50, 250-160);
-    ctx.lineTo(500, 250-160);
-    ctx.moveTo(50, 250-240);
-    ctx.lineTo(500, 250-240);
+    ctx.moveTo(50, 250 - 40);
+    ctx.lineTo(500, 250 - 40);
+    ctx.moveTo(50, 250 - 80);
+    ctx.lineTo(500, 250 - 80);
+    ctx.moveTo(50, 250 - 120);
+    ctx.lineTo(500, 250 - 120);
+    ctx.moveTo(50, 250 - 160);
+    ctx.lineTo(500, 250 - 160);
+    ctx.moveTo(50, 250 - 240);
+    ctx.lineTo(500, 250 - 240);
     ctx.strokeStyle = "#BBBBBB";
     ctx.stroke();
 
     ctx.beginPath();
     ctx.moveTo(50, 0);
     ctx.lineTo(50, 250);
-    ctx.moveTo(50, 250-200)
-    ctx.lineTo(500, 250-200);
+    ctx.moveTo(50, 250 - 200)
+    ctx.lineTo(500, 250 - 200);
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = 2.0;
     ctx.stroke();
 
     ctx.font="16px Georgia";
     ctx.fillText("1E-20", 0, 250);
-    ctx.fillText("1E-16", 0, 250-40);
-    ctx.fillText("1E-12", 0, 250-80);
-    ctx.fillText("1E-8", 0, 250-120);
-    ctx.fillText("1E-4", 0, 250-160);
-    ctx.fillText("1", 0, 250-200);
-    ctx.fillText("1E+4", 0, 250-240);
+    ctx.fillText("1E-16", 0, 250 - 40);
+    ctx.fillText("1E-12", 0, 250 - 80);
+    ctx.fillText("1E-8", 0, 250 - 120);
+    ctx.fillText("1E-4", 0, 250 - 160);
+    ctx.fillText("1", 0, 250 - 200);
+    ctx.fillText("1E+4", 0, 250 - 240);
 }
 
-var delta_t = 1/60.0;
+var delta_t = 1 / 60.0;
 
 var pi = 3.14159265359;
 
@@ -143,7 +143,7 @@ var mass2 = 1.0;
 var gravity = 9.8;
 var L1 = 1.0;
 var L2 = 1.0;
-var mu = 1 + mass1/mass2;
+var mu = 1 + mass1 / mass2;
 
 var secondPendulumEnabled = true;
 
@@ -162,15 +162,15 @@ var time;
 var slide;
 var count;
 
-var reset = function() {
-    angle1 = -pi/2.0;
+var reset = function () {
+    angle1 = -pi / 2.0;
     velocity1 = 0.0;
-    angle2 = -pi/2.0;
+    angle2 = -pi / 2.0;
     velocity2 = 0.0;
 
-    angle3 = -pi/2.0;
+    angle3 = -pi / 2.0;
     velocity3 = 0.0;
-    angle4 = -pi/2.0;
+    angle4 = -pi / 2.0;
     velocity4 = 0.0;
 
     y1 = 0.0;
@@ -180,68 +180,66 @@ var reset = function() {
     count = 0;
 
     pathContext.fillStyle = "rgba(255,255,255,1)";
-    pathContext.fillRect(0,0,500,500);
+    pathContext.fillRect(0, 0, 500, 500);
 
     drawgrid(ctx);
 
-    angle1 = $("#sliderangle1").slider("option", "value");
-    angle2 = $("#sliderangle2").slider("option", "value");
+    angle1 = $( "#sliderangle1" ).slider("option", "value");
+    angle2 = $( "#sliderangle2" ).slider("option", "value");
     angle3 = angle1;
     angle4 = angle2;
 
     // Adjust pendulum rotation
-    $("#PendulumBase").attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum").attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
+    $( "#PendulumBase" ).attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
+    $( "#SecondPendulum" ).attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
 
-    $("#PendulumBase2").attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum2").attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
+    $( "#PendulumBase2" ).attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
+    $( "#SecondPendulum2" ).attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
 }
 
 
-f = function(t, Phi1, dPhi1, Phi2, dPhi2) {
-    return (gravity*(Math.sin(Phi2)*Math.cos(Phi1-Phi2)-mu*Math.sin(Phi1))-(L2*dPhi2*dPhi2+L1*dPhi1*dPhi1*Math.cos(Phi1-Phi2))*Math.sin(Phi1-Phi2))/(L1*(mu-Math.cos(Phi1-Phi2)*Math.cos(Phi1-Phi2)));
+var f = function (t, Phi1, dPhi1, Phi2, dPhi2) {
+    return (gravity*(Math.sin(Phi2)*Math.cos(Phi1 - Phi2) - mu*Math.sin(Phi1)) - (L2*dPhi2*dPhi2 + L1*dPhi1*dPhi1*Math.cos(Phi1 - Phi2))*Math.sin(Phi1 - Phi2))/(L1*(mu - Math.cos(Phi1 - Phi2)*Math.cos(Phi1 - Phi2)));
 }
 
-g = function(t, Phi1, dPhi1, Phi2, dPhi2) {
-    return (mu*gravity*(Math.sin(Phi1)*Math.cos(Phi1-Phi2)-Math.sin(Phi2))+(mu*L1*dPhi1*dPhi1+L2*dPhi2*dPhi2*Math.cos(Phi1-Phi2))*Math.sin(Phi1-Phi2))/(L2*(mu-Math.cos(Phi1-Phi2)*Math.cos(Phi1-Phi2)));
+var g = function (t, Phi1, dPhi1, Phi2, dPhi2) {
+    return (mu*gravity*(Math.sin(Phi1)*Math.cos(Phi1 - Phi2)-Math.sin(Phi2)) + (mu*L1*dPhi1*dPhi1 + L2*dPhi2*dPhi2*Math.cos(Phi1 - Phi2))*Math.sin(Phi1 - Phi2))/(L2*(mu - Math.cos(Phi1 - Phi2)*Math.cos(Phi1 - Phi2)));
 }
 
-f2 = function(t, Phi1, dPhi1, Phi2, dPhi2) {
+var f2 = function (t, Phi1, dPhi1, Phi2, dPhi2) {
 
     return -(gravity*(2.0*mass1 + mass2)*Math.sin(Phi1) + mass2*(gravity*Math.sin(Phi1 - 2.0*Phi2) + 2.0*(dPhi2*dPhi2*L2 + dPhi1*dPhi1*L1*Math.cos(Phi1 - Phi2))*Math.sin(Phi1 - Phi2)))/(2.0*L1*(mass1 + mass2 - mass2*Math.cos(Phi1 - Phi2)*Math.cos(Phi1 - Phi2)));
 }
 
-g2 = function(t, Phi1, dPhi1, Phi2, dPhi2) {
+var g2 = function (t, Phi1, dPhi1, Phi2, dPhi2) {
     return ((dPhi1*dPhi1*L1*(mass1 + mass2) + gravity*(mass1 + mass2)*Math.cos(Phi1) + dPhi2*dPhi2*L2*mass2*Math.cos(Phi1 - Phi2))*Math.sin(Phi1 - Phi2))/(L2*(mass1 + mass2 - mass2*Math.cos(Phi1 - Phi2)*Math.cos(Phi1 - Phi2)));
 }
 
-h = function(t, Phi1, dPhi1, Phi2, dPhi2) {
+var h = function (t, Phi1, dPhi1, Phi2, dPhi2) {
     return dPhi1;
 }
 
-i = function(t, Phi1, dPhi1, Phi2, dPhi2) {
+var i = function (t, Phi1, dPhi1, Phi2, dPhi2) {
     return dPhi2;
 }
-
-
 
 var angle1prev;
 var angle2prev;
 var angle3prev;
 var angle4prev;
 
-test = function() {
+var test = function () {
 
     // Adjust pendulum rotation
-    $("#PendulumBase").attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
-    $("#SecondPendulum").attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
+    $("#PendulumBase").attr("transform", "rotate(" + (-angle1 * 180.0 / pi) + ",252.5,252.5)");
+    $("#SecondPendulum").attr("transform", "rotate(" + (-(angle2 - angle1) * 180.0 / pi) + ",252.5,352.5)");
 
     if (secondPendulumEnabled) {
-        $("#PendulumBase2").attr("transform", "rotate("+(-angle3*180.0/pi)+",252.5,252.5)");
-        $("#SecondPendulum2").attr("transform", "rotate("+(-(angle4-angle3)*180.0/pi)+",252.5,352.5)");
+        $("#PendulumBase2").attr("transform", "rotate(" + (-angle3 * 180.0 / pi) + ",252.5,252.5)");
+        $("#SecondPendulum2").attr("transform", "rotate(" + (-(angle4 - angle3) * 180.0 / pi) + ",252.5,352.5)");
     } else {
-        $("#PendulumBase2").attr("transform", "rotate("+(-angle1*180.0/pi)+",252.5,252.5)");
-        $("#SecondPendulum2").attr("transform", "rotate("+(-(angle2-angle1)*180.0/pi)+",252.5,352.5)");
+        $("#PendulumBase2").attr("transform", "rotate(" + (-angle1 * 180.0 / pi) + ",252.5,252.5)");
+        $("#SecondPendulum2").attr("transform", "rotate(" + (-(angle2 - angle1) * 180.0 / pi) + ",252.5,352.5)");
     }
     
     
@@ -257,53 +255,53 @@ test = function() {
     o0 = delta_t * h(time, angle1, velocity1, angle2, velocity2);
     n0 = delta_t * i(time, angle1, velocity1, angle2, velocity2);
 
-    k1 = delta_t * f(time + delta_t/2, angle1 + o0/2, velocity1 + k0/2, angle2 + n0/2, velocity2 + l0/2);
-    l1 = delta_t * g(time + delta_t/2, angle1 + o0/2, velocity1 + k0/2, angle2 + n0/2, velocity2 + l0/2);
-    o1 = delta_t * h(time + delta_t/2, angle1 + o0/2, velocity1 + k0/2, angle2 + n0/2, velocity2 + l0/2);
-    n1 = delta_t * i(time + delta_t/2, angle1 + o0/2, velocity1 + k0/2, angle2 + n0/2, velocity2 + l0/2);
+    k1 = delta_t * f(time + delta_t / 2, angle1 + o0 / 2, velocity1 + k0 / 2, angle2 + n0 / 2, velocity2 + l0 / 2);
+    l1 = delta_t * g(time + delta_t / 2, angle1 + o0 / 2, velocity1 + k0 / 2, angle2 + n0 / 2, velocity2 + l0 / 2);
+    o1 = delta_t * h(time + delta_t / 2, angle1 + o0 / 2, velocity1 + k0 / 2, angle2 + n0 / 2, velocity2 + l0 / 2);
+    n1 = delta_t * i(time + delta_t / 2, angle1 + o0 / 2, velocity1 + k0 / 2, angle2 + n0 / 2, velocity2 + l0 / 2);
 
-    k2 = delta_t * f(time + delta_t/2, angle1 + o1/2, velocity1 + k1/2, angle2 + n1/2, velocity2 + l1/2);
-    l2 = delta_t * g(time + delta_t/2, angle1 + o1/2, velocity1 + k1/2, angle2 + n1/2, velocity2 + l1/2);
-    o2 = delta_t * h(time + delta_t/2, angle1 + o1/2, velocity1 + k1/2, angle2 + n1/2, velocity2 + l1/2);
-    n2 = delta_t * i(time + delta_t/2, angle1 + o1/2, velocity1 + k1/2, angle2 + n1/2, velocity2 + l1/2);
+    k2 = delta_t * f(time + delta_t / 2, angle1 + o1 / 2, velocity1 + k1 / 2, angle2 + n1 / 2, velocity2 + l1 / 2);
+    l2 = delta_t * g(time + delta_t / 2, angle1 + o1 / 2, velocity1 + k1 / 2, angle2 + n1 / 2, velocity2 + l1 / 2);
+    o2 = delta_t * h(time + delta_t / 2, angle1 + o1 / 2, velocity1 + k1 / 2, angle2 + n1 / 2, velocity2 + l1 / 2);
+    n2 = delta_t * i(time + delta_t / 2, angle1 + o1 / 2, velocity1 + k1 / 2, angle2 + n1 / 2, velocity2 + l1 / 2);
 
     k3 = delta_t * f(time + delta_t, angle1 + o2, velocity1 + k2, angle2 + n2, velocity2 + l2);
     l3 = delta_t * g(time + delta_t, angle1 + o2, velocity1 + k2, angle2 + n2, velocity2 + l2);
     o3 = delta_t * h(time + delta_t, angle1 + o2, velocity1 + k2, angle2 + n2, velocity2 + l2);
     n3 = delta_t * i(time + delta_t, angle1 + o2, velocity1 + k2, angle2 + n2, velocity2 + l2);
 
-    velocity1 = velocity1 + k0/6 + k1/3 + k2/3 + k3/6;
-    angle1 = angle1 + o0/6 + o1/3 + o2/3 + o3/6;
+    velocity1 = velocity1 + k0 / 6 + k1 / 3 + k2 / 3 + k3 / 6;
+    angle1 = angle1 + o0 / 6 + o1 / 3 + o2 / 3 + o3 / 6;
 
-    velocity2 = velocity2 + l0/6 + l1/3 + l2/3 + l3/6;
-    angle2 = angle2 + n0/6 + n1/3 + n2/3 + n3/6;
+    velocity2 = velocity2 + l0 / 6 + l1 / 3 + l2 / 3 + l3 / 6;
+    angle2 = angle2 + n0 / 6 + n1 / 3 + n2 / 3 + n3 / 6;
 
     // RK4 for double pendulum 2
     k0 = delta_t * f2(time, angle3, velocity3, angle4, velocity4);
     l0 = delta_t * g2(time, angle3, velocity3, angle4, velocity4);
-    o0 = delta_t * h(time, angle3, velocity3, angle4, velocity4);
-    n0 = delta_t * i(time, angle3, velocity3, angle4, velocity4);
+    o0 = delta_t * h(time,  angle3, velocity3, angle4, velocity4);
+    n0 = delta_t * i(time,  angle3, velocity3, angle4, velocity4);
 
-    k1 = delta_t * f2(time + delta_t/2, angle3 + o0/2, velocity3 + k0/2, angle4 + n0/2, velocity4 + l0/2);
-    l1 = delta_t * g2(time + delta_t/2, angle3 + o0/2, velocity3 + k0/2, angle4 + n0/2, velocity4 + l0/2);
-    o1 = delta_t * h(time + delta_t/2, angle3 + o0/2, velocity3 + k0/2, angle4 + n0/2, velocity4 + l0/2);
-    n1 = delta_t * i(time + delta_t/2, angle3 + o0/2, velocity3 + k0/2, angle4 + n0/2, velocity4 + l0/2);
+    k1 = delta_t * f2(time + delta_t / 2, angle3 + o0 / 2, velocity3 + k0 / 2, angle4 + n0 / 2, velocity4 + l0 / 2);
+    l1 = delta_t * g2(time + delta_t / 2, angle3 + o0 / 2, velocity3 + k0 / 2, angle4 + n0 / 2, velocity4 + l0 / 2);
+    o1 = delta_t * h(time  + delta_t / 2, angle3 + o0 / 2, velocity3 + k0 / 2, angle4 + n0 / 2, velocity4 + l0 / 2);
+    n1 = delta_t * i(time  + delta_t / 2, angle3 + o0 / 2, velocity3 + k0 / 2, angle4 + n0 / 2, velocity4 + l0 / 2);
 
-    k2 = delta_t * f2(time + delta_t/2, angle3 + o1/2, velocity3 + k1/2, angle4 + n1/2, velocity4 + l1/2);
-    l2 = delta_t * g2(time + delta_t/2, angle3 + o1/2, velocity3 + k1/2, angle4 + n1/2, velocity4 + l1/2);
-    o2 = delta_t * h(time + delta_t/2, angle3 + o1/2, velocity3 + k1/2, angle4 + n1/2, velocity4 + l1/2);
-    n2 = delta_t * i(time + delta_t/2, angle3 + o1/2, velocity3 + k1/2, angle4 + n1/2, velocity4 + l1/2);
+    k2 = delta_t * f2(time + delta_t / 2, angle3 + o1 / 2, velocity3 + k1 / 2, angle4 + n1 / 2, velocity4 + l1 / 2);
+    l2 = delta_t * g2(time + delta_t / 2, angle3 + o1 / 2, velocity3 + k1 / 2, angle4 + n1 / 2, velocity4 + l1 / 2);
+    o2 = delta_t * h(time  + delta_t / 2, angle3 + o1 / 2, velocity3 + k1 / 2, angle4 + n1 / 2, velocity4 + l1 / 2);
+    n2 = delta_t * i(time  + delta_t / 2, angle3 + o1 / 2, velocity3 + k1 / 2, angle4 + n1 / 2, velocity4 + l1 / 2);
 
     k3 = delta_t * f2(time + delta_t, angle3 + o2, velocity3 + k2, angle4 + n2, velocity4 + l2);
     l3 = delta_t * g2(time + delta_t, angle3 + o2, velocity3 + k2, angle4 + n2, velocity4 + l2);
-    o3 = delta_t * h(time + delta_t, angle3 + o2, velocity3 + k2, angle4 + n2, velocity4 + l2);
-    n3 = delta_t * i(time + delta_t, angle3 + o2, velocity3 + k2, angle4 + n2, velocity4 + l2);
+    o3 = delta_t * h(time  + delta_t, angle3 + o2, velocity3 + k2, angle4 + n2, velocity4 + l2);
+    n3 = delta_t * i(time  + delta_t, angle3 + o2, velocity3 + k2, angle4 + n2, velocity4 + l2);
 
-    velocity3 = velocity3 + k0/6 + k1/3 + k2/3 + k3/6;
-    angle3 = angle3 + o0/6 + o1/3 + o2/3 + o3/6;
+    velocity3 = velocity3 + k0 / 6 + k1 / 3 + k2 / 3 + k3 / 6;
+    angle3 = angle3 + o0 / 6 + o1 / 3 + o2 / 3 + o3 / 6;
 
-    velocity4 = velocity4 + l0/6 + l1/3 + l2/3 + l3/6;
-    angle4 = angle4 + n0/6 + n1/3 + n2/3 + n3/6;
+    velocity4 = velocity4 + l0 / 6 + l1 / 3 + l2 / 3 + l3 / 6;
+    angle4 = angle4 + n0 / 6 + n1 / 3 + n2 / 3 + n3 / 6;
 
     // Increase time
     time = time + delta_t;
@@ -341,7 +339,7 @@ test = function() {
     } else {
         if (count % 20 == 0) {
             ctx.fillStyle = "rgba(255,255,255,1)";
-            ctx.fillRect(0,0,500,300);
+            ctx.fillRect(0, 0, 500, 300);
             ctx.fillStyle = "rgba(0,0,0,1)";
         }
     }
@@ -349,15 +347,15 @@ test = function() {
     // Add fading to pendulum path
     if (count % 20 == 0) {
         pathContext.fillStyle = "rgba(255,255,255,0.1)";
-        pathContext.fillRect(0,0,500,500);
+        pathContext.fillRect(0, 0, 500, 500);
     }
     count++;
 
     if (secondPendulumEnabled) {
         // Pendulum path 2
         pathContext.beginPath();
-        pathContext.moveTo(250+Math.sin(angle3prev)*100+Math.sin(angle4prev)*100, 250+Math.cos(angle3prev)*100+Math.cos(angle4prev)*100);
-        pathContext.lineTo(250+Math.sin(angle3)*100+Math.sin(angle4)*100, 250+Math.cos(angle3)*100+Math.cos(angle4)*100);
+        pathContext.moveTo(250 + Math.sin(angle3prev) * 100 + Math.sin(angle4prev) * 100, 250 + Math.cos(angle3prev) * 100 + Math.cos(angle4prev) * 100);
+        pathContext.lineTo(250 + Math.sin(angle3) * 100 + Math.sin(angle4) * 100, 250 + Math.cos(angle3) * 100 + Math.cos(angle4) * 100);
         pathContext.lineWidth = 2;
         pathContext.strokeStyle = "#00FF00";
         pathContext.stroke();
@@ -365,18 +363,20 @@ test = function() {
     
     // Pendulum path 1
     pathContext.beginPath();
-    pathContext.moveTo(250+Math.sin(angle1prev)*100+Math.sin(angle2prev)*100, 250+Math.cos(angle1prev)*100+Math.cos(angle2prev)*100);
-    pathContext.lineTo(250+Math.sin(angle1)*100+Math.sin(angle2)*100, 250+Math.cos(angle1)*100+Math.cos(angle2)*100);
+    pathContext.moveTo(250 + Math.sin(angle1prev) * 100 + Math.sin(angle2prev) * 100, 250 + Math.cos(angle1prev) * 100 + Math.cos(angle2prev) * 100);
+    pathContext.lineTo(250 + Math.sin(angle1) * 100 + Math.sin(angle2) * 100, 250 + Math.cos(angle1) * 100 + Math.cos(angle2) * 100);
     pathContext.lineWidth = 2;
     pathContext.strokeStyle = "#FF0000";
     pathContext.stroke();
 }
 
-var running = true;
-var interval = setInterval(test, 17);
+
+
 
 $( function () {
-    $("#playpause").click( function( event ) {
+    var running = true;
+
+    $( "#playpause" ).click( function( event ) {
         if (running) {
             running = false;
             clearInterval(interval);
@@ -386,16 +386,16 @@ $( function () {
         }
     } );
 
-    $("#restart").click( function( event ) {
+    $( "#restart" ).click( function( event ) {
         reset();
     } );
 
-    $("#sliderangle1").slider({
+    $( "#sliderangle1" ).slider({
         orientation: "horizontal",
         range: false,
         min: -pi,
         max: pi,
-        value: -pi/2,
+        value: -pi / 2,
         step: 0.01,
         animate: true,
         slide: function(event, ui) {
@@ -403,12 +403,12 @@ $( function () {
         }
     } );
 
-    $("#sliderangle2").slider({
+    $( "#sliderangle2" ).slider({
         orientation: "horizontal",
         range: false,
         min: -pi,
         max: pi,
-        value: -pi/2,
+        value: -pi / 2,
         step: 0.01,
         animate: true,
         slide: function(event, ui) {
@@ -433,6 +433,8 @@ $( function () {
     } );
 
     reset();
+
+    var interval = setInterval(test, 17);
 } );
 
 </script>
