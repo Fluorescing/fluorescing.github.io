@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <title>Flashcards</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/black-tie/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <h1>Flashcards</h1>
+
+    <h3 id="question">Question</h3>
+
+    <form action="">
+        <input type="radio" name="answer" value="0" id="radio1"><span id="answer1">Answer 1</span><br><br>
+        <input type="radio" name="answer" value="1" id="radio2"><span id="answer2">Answer 2</span><br><br>
+        <input type="radio" name="answer" value="2" id="radio3"><span id="answer3">Answer 3</span><br><br>
+        <input type="radio" name="answer" value="3" id="radio4"><span id="answer4">Answer 4</span><br><br>
+        <input type="radio" name="answer" value="4" id="radio5"><span id="answer5">Answer 5</span><br><br>
+        
+        <button type="button" onclick="checkQuestion()">Check</button>
+        <button type="button" onclick="poseQuestionClick()">Another</button>
+        <div id="result"></div>
+    </form>
+</body>
+
+<script>
+    $( function () {
+        $("#answer1").html("\\(\\int_0^1 e^{-x^2} dx\\)");
+
+        poseQuestion(questions, length);
+    } );
+
+    // Returns a random integer between min (included) and max (excluded)
+    // Using Math.round() will give you a non-uniform distribution!
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function getRandomAnswer(answers, taken) {
+        var searching = true;
+        var answerId;
+
+        var count = 0;
+        var max = 256;
+
+        while (searching) {
+            answerId = getRandomInt(0, 5);
+
+            if (!taken[answerId]) {
+                searching = false;
+                taken[answerId] = true;
+            }
+
+            count++;
+            if (count > max) {
+                alert("getRandomAnswer() timed out...");
+                searching = false;
+            }
+                
+        }
+
+        return answerId;
+    } 
+
+    function poseQuestion(questions, length) {
+        var questionId = getRandomInt(0, length);
+
+        $( "#question" ).html(questions[questionId]["question"]);
+
+        var taken = {0: false, 1: false, 2: false, 3: false, 4: false};
+
+        var answerA = getRandomAnswer(questions[questionId]["answers"], taken);
+        var answerB = getRandomAnswer(questions[questionId]["answers"], taken);
+        var answerC = getRandomAnswer(questions[questionId]["answers"], taken);
+        var answerD = getRandomAnswer(questions[questionId]["answers"], taken);
+        var answerE = getRandomAnswer(questions[questionId]["answers"], taken);
+
+        $( "#answer1" ).html(questions[questionId]["answers"][answerA]);
+        $( "#answer2" ).html(questions[questionId]["answers"][answerB]);
+        $( "#answer3" ).html(questions[questionId]["answers"][answerC]);
+        $( "#answer4" ).html(questions[questionId]["answers"][answerD]);
+        $( "#answer5" ).html(questions[questionId]["answers"][answerE]);
+
+        $( "#radio1" ).attr("value", answerA);
+        $( "#radio2" ).attr("value", answerB);
+        $( "#radio3" ).attr("value", answerC);
+        $( "#radio4" ).attr("value", answerD);
+        $( "#radio5" ).attr("value", answerE);
+    }
+
+    function checkQuestion() {
+        if ($( "#radio1" )[0].checked) {
+            if ($( "#radio1" ).attr("value") == 0) {
+                $( "#result" ).html("<h3>Correct!</h3>");
+            } else {
+                $( "#result" ).html("<h3>Wrong!</h3>");
+            }
+        } else if ($( "#radio2" )[0].checked) {
+            if ($( "#radio2" ).attr("value") == 0) {
+                $( "#result" ).html("<h3>Correct!</h3>");
+            } else {
+                $( "#result" ).html("<h3>Wrong!</h3>");
+            }
+        } else if ($( "#radio3" )[0].checked) {
+            if ($( "#radio3" ).attr("value") == 0) {
+                $( "#result" ).html("<h3>Correct!</h3>");
+            } else {
+                $( "#result" ).html("<h3>Wrong!</h3>");
+            }
+        } else if ($( "#radio4" )[0].checked) {
+            if ($( "#radio4" ).attr("value") == 0) {
+                $( "#result" ).html("<h3>Correct!</h3>");
+            } else {
+                $( "#result" ).html("<h3>Wrong!</h3>");
+            }
+        } else if ($( "#radio5" )[0].checked) {
+            if ($( "#radio5" ).attr("value") == 0) {
+                $( "#result" ).html("<h3>Correct!</h3>");
+            } else {
+                $( "#result" ).html("<h3>Wrong!</h3>");
+            }
+        } 
+    }
+
+    var questions = {
+        0: {
+            "question": "What is the magnetic field due to an infinitely long wire?",
+            "answers": {
+                0: "\\(B=\\frac{\\mu_0 i}{2\\pi R}\\)",
+                1: "\\(B=\\frac{\\mu_0 i}{4\\pi R}\\)",
+                2: "\\(B=\\frac{2\\mu_0 i}{\\pi R}\\)",
+                3: "\\(E=\\frac{\\epsilon_0 i}{2\\pi R}\\)",
+                4: "\\(E=\\frac{\\epsilon_0 i}{\\pi R}\\)"
+            }
+        },
+        1: {
+            "question": "What is the equation for the tension and compression of a material?",
+            "answers": {
+                0: "\\(\\frac{F}{A}=E\\frac{\\Delta L}{L}\\)",
+                1: "\\(\\frac{F}{A}=E\\frac{L}{V}\\)",
+                2: "\\(\\frac{F}{A}=E\\frac{L}{\\Delta L}\\)",
+                3: "\\(\\frac{F}{A}=E\\frac{\\Delta L}{\\Delta L}\\)",
+                4: "\\(\\frac{F}{A}=E\\frac{V}{\\Delta L}\\)"
+            }
+        },
+        2: {
+            "question": "What is the pressure at a specific depth?",
+            "answers": {
+                0: "\\(p=p_0+\\rho g h\\)",
+                1: "\\(p=p_0+p g h\\)",
+                2: "\\(p=p_0+\\rho h\\)",
+                3: "\\(p=p_0+p h\\)",
+                4: "\\(p=p_0+\\rho g h^2\\)"
+            }
+        },
+        3: {
+            "question": "What is the capacitance of a spherical capacitor?",
+            "answers": {
+                0: "\\(C = 4\\pi\\epsilon_0\\frac{a b}{b - a}\\)",
+                1: "\\(C = 2\\pi\\epsilon_0\\frac{a b}{a - b}\\)",
+                2: "\\(C = 4\\pi\\epsilon_0 R\\)",
+                3: "\\(C = 2\\pi\\epsilon_0 R\\)",
+                4: "\\(C = 2\\pi\\epsilon_0\\frac{a b}{b - a}\\)"
+            }
+        },
+        4: {
+            "question": "What is the resulting intensity of subsequent polarizations?",
+            "answers": {
+                0: "\\(I = I_0 \\cos^2 \\theta \\)",
+                1: "\\(I = I_0 \\tan^2 \\theta \\)",
+                2: "\\(I = I_0 \\cos \\theta \\)",
+                3: "\\(I = I_0 \\sin \\theta \\)",
+                4: "\\(I = I_0 \\sin^2 \\theta \\)"
+            }
+        },
+        5: {
+            "question": "What are the frequencies of a pipe with one end open?",
+            "answers": {
+                0: "\\(f=\\frac{nv}{4L}, n=1,3,5,... \\)",
+                1: "\\(f=\\frac{nv}{4L}, n=1,2,3,... \\)",
+                2: "\\(f=\\frac{nv}{2L}, n=1,3,5,... \\)",
+                3: "\\(f=\\frac{nv}{2L}, n=1,2,3,... \\)",
+                4: "\\(f=\\frac{nv}{4L}, n=0,2,4,... \\)"
+            }
+        },
+        6: {
+            "question": "What is the first rocket equation?",
+            "answers": {
+                0: "\\(F = R v_{rel}\\)",
+                1: "\\(F = v_e \\ln\\frac{m_0}{m_f}\\)",
+                2: "\\(\\Delta v = R v_{rel}\\)",
+                3: "\\(\\Delta v = v_e \\ln\\frac{m_0}{m_f}\\)",
+                4: "\\(\\Delta v = v_e \\ln\\frac{m_f}{m_0}\\)"
+            }
+        },
+        7: {
+            "question": "What is the capacitance of an isolated sphere?",
+            "answers": {
+                0: "\\(C = 4\\pi\\epsilon_0 R\\)",
+                1: "\\(C = 2\\pi\\epsilon_0 R\\)",
+                2: "\\(C = 2\\pi\\epsilon_0\\frac{a b}{b - a}\\)",
+                3: "\\(C = 4\\pi\\epsilon_0\\frac{a b}{b - a}\\)",
+                4: "\\(C = 4\\pi\\epsilon_0\\frac{a b}{a - b}\\)"
+            }
+        },
+        8: {
+            "question": "What is the charge on a capacitor?",
+            "answers": {
+                0: "\\(q = CV\\)",
+                1: "\\(q = CI\\)",
+                2: "\\(q = IRC\\)",
+                3: "\\(q = CVR\\)",
+                4: "\\(q = CIV\\)"
+            }
+        },
+        9: {
+            "question": "What is the relativistic relation between momentum and total energy of a particle?",
+            "answers": {
+                0: "\\(E^2 = (pc)^2 + (mc^2)^2\\)",
+                1: "\\(E = pc + mc^2\\)",
+                2: "\\(E^2 = (pc)^2\\)",
+                3: "\\(E = pc\\)",
+                4: "\\(E = p\\hbar\\)"
+            }
+        },
+        10: {
+            "question": "What is the AC circuit phase constant?",
+            "answers": {
+                0: "\\(\\tan\\phi = \\frac{X_L-X_C}{R}\\)",
+                1: "\\(\\tan\\phi = \\frac{X_C-X_L}{R}\\)",
+                2: "\\(\\sin\\phi = \\frac{X_C-X_L}{R}\\)",
+                3: "\\(\\tan\\phi = \\frac{X_L-R}{X_C}\\)",
+                4: "\\(\\tan\\phi = \\frac{X_C-R}{X_L}\\)"
+            }
+        },
+        11: {
+            "question": "What is the magnetic field at the center of a circular arc?",
+            "answers": {
+                0: "\\(B=\\frac{\\mu_0 i \\phi}{4\\pi R}\\)",
+                1: "\\(B=\\frac{\\mu_0 i \\phi}{2\\pi R}\\)",
+                2: "\\(B=\\frac{\\mu_0 i \\phi}{\\pi R}\\)",
+                3: "\\(B=\\frac{2\\pi \\mu_0 i \\phi}{4\\pi R}\\)",
+                4: "\\(B=\\frac{4\\pi \\mu_0 i \\phi}{R}\\)"
+            }
+        },
+        12: {
+            "question": "What is the angular frequency of a simple pendulum?",
+            "answers": {
+                0: "\\(\\omega = \\sqrt{\\frac{g}{L}}\\)",
+                1: "\\(\\omega = \\sqrt{\\frac{L}{g}}\\)",
+                2: "\\(\\omega = 2\\pi\\sqrt{\\frac{L}{g}}\\)",
+                3: "\\(f = \\sqrt{\\frac{L}{g}}\\)",
+                4: "\\(f = \\sqrt{\\frac{g}{L}}\\)"
+            }
+        },
+        13: {
+            "question": "What is the inductance of a long solenoid?",
+            "answers": {
+                0: "\\(\\frac{L}{l}=\\mu_0 n^2 A\\)",
+                1: "\\(\\frac{L}{l}=\\epsilon_0 n^2 A\\)",
+                2: "\\(\\frac{L}{l}=\\epsilon_0 n A\\)",
+                3: "\\(L=\\mu_0 n^2 A\\)",
+                4: "\\(L=\\mu_0 n A\\)"
+            }
+        },
+        14: {
+            "question": "What is the height of a projectile?",
+            "answers": {
+                0: "\\(y(x)=-\\frac{g x^2}{2(v_0 \\cos\\theta_0)^2}+x\\tan\\theta\\)",
+                1: "\\(y(x)=-\\frac{g x^2}{2v_0 \\cos\\theta_0}+x\\tan\\theta\\)",
+                2: "\\(y(x)=-\\frac{g x}{2(v_0 \\cos\\theta_0)^2}+x\\cos\\theta\\)",
+                3: "\\(y(x)=\\frac{g x^2}{2v_0 \\cos\\theta_0}-x\\tan\\theta\\)",
+                4: "\\(y(x)=\\frac{g x}{2(v_0 \\cos\\theta_0)^2}-x\\cos\\theta\\)"
+            }
+        },
+        15: {
+            "question": "What is the temperature dependancey of resistivity?",
+            "answers": {
+                0: "\\(\\rho = \\rho_0[\\alpha(T-T_0)+1]\\)",
+                1: "\\(\\rho = \\rho_0[\\alpha(T-T_0)]\\)",
+                2: "\\(R = R_0[\\alpha(T_0-T)+1]\\)",
+                3: "\\(R = R_0[\\alpha(T-T_0)]\\)",
+                4: "\\(\\rho = \\rho_0[\\alpha(T_0-T)]\\)"
+            }
+        },
+        16: {
+            "question": "What is the potential energy in a capcitor?",
+            "answers": {
+                0: "\\(U = \\frac{q^2}{2 C} = \\frac{1}{2} C V^2\\)",
+                1: "\\(U = \\frac{q^2}{2 C} = \\frac{1}{2} C V\\)",
+                2: "\\(U = \\frac{q}{2 C} = \\frac{1}{2} C V^2\\)",
+                3: "\\(U = \\frac{q}{C} = \\frac{1}{2} C V^2\\)",
+                4: "\\(U = \\frac{q^2}{C} = \\frac{1}{2} C V\\)"
+            }
+        },
+        17: {
+            "question": "What angular frequency does a spring oscillate at?",
+            "answers": {
+                0: "\\(\\omega = \\sqrt{\\frac{k}{m}}\\)",
+                1: "\\(\\omega = \\sqrt{\\frac{m}{k}}\\)",
+                2: "\\(\\omega = 2\\pi\\sqrt{\\frac{k}{m}}\\)",
+                3: "\\(f = \\sqrt{\\frac{k}{m}}\\)",
+                4: "\\(f = \\sqrt{\\frac{m}{k}}\\)"
+            }
+        },
+        18: {
+            "question": "What is the range of a projectile?",
+            "answers": {
+                0: "\\(R = \\frac{v_0^2}{g}\\sin(2\\theta_0)\\)",
+                1: "\\(R = \\frac{v_0}{g}\\sin(2\\theta_0)\\)",
+                2: "\\(R = \\frac{2 v_0^2}{g}\\cos(2\\theta_0)\\)",
+                3: "\\(R = \\frac{2 v_0}{g}\\sin\\theta_0\\)",
+                4: "\\(R = \\frac{v_0^2}{g}\\cos\\theta_0\\)"
+            }
+        },
+        19: {
+            "question": "What is Kepler's third law?",
+            "answers": {
+                0: "\\(T^2 \\propto a^3\\)",
+                1: "\\(T^3 \\propto a^2\\)",
+                2: "\\(T^4 \\propto a^3\\)",
+                3: "\\(T^2 \\propto a^4\\)",
+                4: "\\(T^3 \\propto a^3\\)"
+            }
+        },
+        20: {
+            "question": "What is the magnetic field in a toroid?",
+            "answers": {
+                0: "\\(B = \\frac{\\mu_0 i N}{2\\pi r}\\)",
+                1: "\\(B = \\frac{\\mu_0 i N}{\\pi r}\\)",
+                2: "\\(B = \\frac{\\mu_0 i n}{2\\pi r^2}\\)",
+                3: "\\(B = \\frac{\\mu_0 i n}{\\pi r}\\)",
+                4: "\\(B = \\frac{\\mu_0 i N}{2\\pi r^2}\\)"
+            }
+        },
+        21: {
+            "question": "What is the total impedance of an AC circuit?",
+            "answers": {
+                0: "\\(Z = \\sqrt{R^2 + (X_L-X_C)^2}\\)",
+                1: "\\(Z = \\sqrt{R^2 + X_L^2 + X_C^2}\\)",
+                2: "\\(Z = \\sqrt{R + (X_L-X_C)}\\)",
+                3: "\\(Z = \\sqrt{R + (X_C-X_L)}\\)",
+                4: "\\(Z = R + X_L - X_C\\)"
+            }
+        }
+    };
+
+    var length = 0;
+
+    for (key in questions) {
+        length++;
+    }
+
+    function poseQuestionClick() {
+        poseQuestion(questions, length);
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        $( "#result" ).html("");
+        $( "#radio1" )[0].checked = false;
+        $( "#radio2" )[0].checked = false;
+        $( "#radio3" )[0].checked = false;
+        $( "#radio4" )[0].checked = false;
+        $( "#radio5" )[0].checked = false;
+    }
+</script>
+</html>
