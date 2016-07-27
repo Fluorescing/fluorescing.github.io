@@ -10,6 +10,12 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
     <link rel="stylesheet" href="1.18.13.css">
+
+    <style>
+.vertical-text {
+    transform: rotate(-90deg);
+} 
+    </style>
     
 </head>
 <body>
@@ -79,8 +85,13 @@
             </svg>
 
             <canvas id="path" width="500" height="500"></canvas>
-
-            <canvas id="graph" width="500" height="300"></canvas>
+            <br>
+            <table>
+                <tr>
+                <td width="85px"><h3 class="vertical-text">Difference (radians)</h3></td>
+                <td><canvas id="graph" width="500" height="300"></canvas></td>
+                </tr>
+            </table>
             </div>
         </div>
     </div>
@@ -94,7 +105,7 @@ var ctx = c.getContext("2d");
 var pathCanvas = document.getElementById("path");
 var pathContext = pathCanvas.getContext("2d");
 
-ctx.translate(0.5, 0.5);
+ctx.translate(0.5, 20.5);
 
 var drawgrid = function (ctx) {
     ctx.clearRect(0, 0, 500, 300);
@@ -124,14 +135,22 @@ var drawgrid = function (ctx) {
     ctx.lineWidth = 2.0;
     ctx.stroke();
 
-    ctx.font="16px Georgia";
-    ctx.fillText("1E-20", 0, 250);
-    ctx.fillText("1E-16", 0, 250 - 40);
-    ctx.fillText("1E-12", 0, 250 - 80);
-    ctx.fillText("1E-8", 0, 250 - 120);
-    ctx.fillText("1E-4", 0, 250 - 160);
-    ctx.fillText("1", 0, 250 - 200);
-    ctx.fillText("1E+4", 0, 250 - 240);
+    ctx.font="16px Helvetica";
+    ctx.fillText("1x10", 0, 250);
+    ctx.fillText("1x10", 0, 250 - 40);
+    ctx.fillText("1x10", 0, 250 - 80);
+    ctx.fillText("1x10", 0, 250 - 120);
+    ctx.fillText("1x10", 0, 250 - 160);
+    ctx.fillText("1",    0, 250 - 200);
+    ctx.fillText("1x10", 0, 250 - 240);
+
+    ctx.font="12px Helvetica";
+    ctx.fillText("-20", 30, 238);
+    ctx.fillText("-16", 30, 238 - 40);
+    ctx.fillText("-12", 30, 238 - 80);
+    ctx.fillText("-8",  30, 238 - 120);
+    ctx.fillText("-4",  30, 238 - 160);
+    ctx.fillText("+4",  30, 238 - 240);
 }
 
 var delta_t = 1 / 60.0;
@@ -339,7 +358,7 @@ var test = function () {
     } else {
         if (count % 20 == 0) {
             ctx.fillStyle = "rgba(255,255,255,1)";
-            ctx.fillRect(0, 0, 500, 300);
+            ctx.fillRect(0, -20, 500, 300);
             ctx.fillStyle = "rgba(0,0,0,1)";
         }
     }
@@ -424,10 +443,12 @@ $( function () {
         if ($( "#second-checkbox" ).is(":checked")) {
             $( "#second-checkbox-label" ).html("Enabled");
             secondPendulumEnabled = true;
+            $(" .vertical-text ").css("visibility", "visible");
             reset();
         } else {
             $( "#second-checkbox-label" ).html("Disabled");
             secondPendulumEnabled = false;
+            $(" .vertical-text ").css("visibility", "hidden");
             reset();
         }
     } );
