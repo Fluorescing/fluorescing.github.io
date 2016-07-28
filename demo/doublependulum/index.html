@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=500, initial-scale=1">
     <title>Double Pendulum</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/black-tie/jquery-ui.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
@@ -38,14 +38,16 @@
                 <button id="restart">Restart</button>
                 <br><br>
                 Starting Angle 1
-                <div style="padding: 5px;">
+                <div style="padding: 10px; padding-right: 15px; padding-left: 15px;">
                     <div id="sliderangle1"></div>
                 </div>
+                <div id="angle1value"></div>
                 <br>
                 Starting Angle 2
-                <div style="padding: 5px;">
+                <div style="padding: 10px; padding-right: 15px; padding-left: 15px;">
                     <div id="sliderangle2"></div>
                 </div>
+                <div id="angle2value"></div>
                 <br>
                 Second Pendulum
                 <label id="second-checkbox-label" for="second-checkbox">Enabled</label>
@@ -155,7 +157,7 @@ var drawgrid = function (ctx) {
 
 var delta_t = 1 / 60.0;
 
-var pi = 3.14159265359;
+var pi = 3.1415926535897932384626433832795028841971693993751058209749445;
 
 var mass1 = 1.0;
 var mass2 = 1.0;
@@ -415,10 +417,10 @@ $( function () {
         min: -pi,
         max: pi,
         value: -pi / 2,
-        step: 0.01,
+        step: 0.001,
         animate: true,
         slide: function(event, ui) {
-
+            $( "#angle1value" ).html(Math.round(ui.value*1000)/1000);
         }
     } );
 
@@ -428,12 +430,15 @@ $( function () {
         min: -pi,
         max: pi,
         value: -pi / 2,
-        step: 0.01,
+        step: 0.001,
         animate: true,
         slide: function(event, ui) {
-
+            $( "#angle2value" ).html(Math.round(ui.value*1000)/1000);
         }
     } );
+
+    $( "#angle1value" ).html(Math.round((-pi / 2)*1000)/1000);
+    $( "#angle2value" ).html(Math.round((-pi / 2)*1000)/1000);
 
     $( "#second-checkbox" ).checkboxradio({
         icon: false
