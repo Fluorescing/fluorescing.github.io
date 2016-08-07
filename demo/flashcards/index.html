@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#802020">
     <title>Flashcards</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/black-tie/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
@@ -16,14 +16,16 @@
     <h3 id="question">Question</h3>
 
     <form action="">
-        <input type="radio" name="answer" value="0" id="radio1"><span id="answer1">Answer 1</span><br><br>
-        <input type="radio" name="answer" value="1" id="radio2"><span id="answer2">Answer 2</span><br><br>
-        <input type="radio" name="answer" value="2" id="radio3"><span id="answer3">Answer 3</span><br><br>
-        <input type="radio" name="answer" value="3" id="radio4"><span id="answer4">Answer 4</span><br><br>
-        <input type="radio" name="answer" value="4" id="radio5"><span id="answer5">Answer 5</span><br><br>
+        <input type="radio" name="answer" value="0" id="radio1"><span id="answer1" onclick="$( '#radio1' )[0].checked = true;">Answer 1</span><br><br>
+        <input type="radio" name="answer" value="1" id="radio2"><span id="answer2" onclick="$( '#radio2' )[0].checked = true;">Answer 2</span><br><br>
+        <input type="radio" name="answer" value="2" id="radio3"><span id="answer3" onclick="$( '#radio3' )[0].checked = true;">Answer 3</span><br><br>
+        <input type="radio" name="answer" value="3" id="radio4"><span id="answer4" onclick="$( '#radio4' )[0].checked = true;">Answer 4</span><br><br>
+        <input type="radio" name="answer" value="4" id="radio5"><span id="answer5" onclick="$( '#radio5' )[0].checked = true;">Answer 5</span><br><br>
         
         <button type="button" onclick="checkQuestion()">Check</button>
-        <button type="button" onclick="poseQuestionClick()">Another</button>
+        <button type="button" onclick="poseQuestionClick()">Another</button><br>
+        <input id="questioninput" type="number" min="0" max="0">
+        <button type="button" onclick="poseSpecificQuestionClick()">Goto</button>
         <div id="result"></div>
     </form>
 </body>
@@ -70,6 +72,18 @@
     function poseQuestion(questions, length) {
         var questionId = getRandomInt(0, length);
 
+        $( "#questioninput" )[0].value = questionId;
+
+        showQuestion(questions, questionId);
+    }
+
+    function poseSpecificQuestion(questions, length) {
+        var questionId = $( "#questioninput" )[0].value;
+
+        showQuestion(questions, questionId);
+    }
+
+    function showQuestion(questions, questionId) {
         $( "#question" ).html(questions[questionId]["question"]);
 
         var taken = {0: false, 1: false, 2: false, 3: false, 4: false};
@@ -225,7 +239,7 @@
                 1: "\\(E = pc + mc^2\\)",
                 2: "\\(E^2 = (pc)^2\\)",
                 3: "\\(E = pc\\)",
-                4: "\\(E = p\\hbar\\)"
+                4: "\\(E = \\gamma m c^2\\)"
             }
         },
         10: {
@@ -497,6 +511,116 @@
                 3: "\\(E' - E = \\frac{\\hbar}{m_e c}(1-\\cos\\theta)\\)",
                 4: "\\(\\lambda' - \\lambda = \\frac{\\hbar}{m_e c}(1-\\cos\\theta)\\)"
             }
+        },
+        37: {
+            "question": "Where are the maxima of a diffraction grating?",
+            "answers": {
+                0: "\\(d \\sin\\theta = m \\lambda,~m=0,1,2,...\\)",
+                1: "\\(d \\sin\\theta = m \\lambda,~m=1,3,5,...\\)",
+                2: "\\(2d \\cos\\theta = m \\lambda,~m=0,1,2,...\\)",
+                3: "\\(d \\cos\\theta = m \\lambda,~m=1,3,5,...\\)",
+                4: "\\(2d \\sin\\theta = m \\lambda,~m=0,2,4,...\\)"
+            }
+        },
+        38: {
+            "question": "What is the force on a current of wire in a magnetic field?",
+            "answers": {
+                0: "\\(\\vec{F}_\\text{mag} = i \\vec{L}\\times\\vec{B}\\)",
+                1: "\\(\\vec{F}_\\text{mag} = \\vec{L}\\cdot\\vec{B}\\)",
+                2: "\\(\\vec{F}_\\text{mag} = i \\vec{B}\\times\\vec{L}\\)",
+                3: "\\(\\vec{F}_\\text{mag} = \\vec{B}\\times\\vec{L}\\)",
+                4: "\\(\\vec{F}_\\text{mag} = i \\vec{B}\\cdot\\vec{L}\\)"
+            }
+        },
+        39: {
+            "question": "What is the dipole moment of a solenoid?",
+            "answers": {
+                0: "\\(\\mu = N i A\\)",
+                1: "\\(\\mu = N i\\)",
+                2: "\\(\\mu = \\frac{i A}{N}\\)",
+                3: "\\(\\mu = \\frac{N i}{A}\\)",
+                4: "\\(\\mu = \\frac{i}{N A}\\)"
+            }
+        },
+        39: {
+            "question": "What are the voltages across components?",
+            "answers": {
+                0: "\\(\\mathcal{E},~\\dot{q}R,~\\frac{q}{C},~\\ddot{q}L\\)",
+                1: "\\(\\mathcal{E},~\\dot{q}R,~qC,~\\ddot{q}L\\)",
+                2: "\\(\\mathcal{E},~\\dot{q}R,~qC,~iL\\)",
+                3: "\\(\\mathcal{E},~\\dot{q}R,~\\frac{q}{C},~\\frac{\\ddot{q}}{L}\\)",
+                4: "\\(\\mathcal{E},~\\dot{q}R,~qC,~\\frac{\\ddot{q}}{L}\\)"
+            }
+        },
+        40: {
+            "question": "Where are the maxima of a double-slit?",
+            "answers": {
+                0: "\\(d \\sin\\theta = m \\lambda,~m=0,1,2,...\\)",
+                1: "\\(d \\sin\\theta = m \\lambda,~m=1,3,5,...\\)",
+                2: "\\(2d \\cos\\theta = m \\lambda,~m=0,1,2,...\\)",
+                3: "\\(d \\cos\\theta = m \\lambda,~m=1,3,5,...\\)",
+                4: "\\(2d \\sin\\theta = m \\lambda,~m=0,2,4,...\\)"
+            }
+        },
+        41: {
+            "question": "What is the total relativistic energy?",
+            "answers": {
+                0: "\\(E = \\gamma m c^2\\)",
+                1: "\\(E = \\gamma m c\\)",
+                2: "\\(E = \\hbar\\omega\\)",
+                3: "\\(E = \\sqrt{(pc)^2 + (mc^2)^2}\\)",
+                4: "\\(E^2 = (pc)^2 + (mc^2)^2\\)"
+            }
+        },
+        42: {
+            "question": "What is Bernoulli's equation?",
+            "answers": {
+                0: "\\(p + \\frac{1}{2}\\rho v^2 + \\rho g y = \\text{constant}\\)",
+                1: "\\(p + \\rho v^2 + \\frac{1}{2}\\rho g y = \\text{constant}\\)",
+                2: "\\(p + \\frac{1}{2}\\rho v + \\rho g y = \\text{constant}\\)",
+                3: "\\(p + \\rho v + \\frac{1}{2}\\rho g y = \\text{constant}\\)",
+                4: "\\(\\rho + \\frac{1}{2}\\rho v + p g y = \\text{constant}\\)"
+            }
+        },
+        43: {
+            "question": "What is the Doppler shift?",
+            "answers": {
+                0: "\\(f' = f\\frac{c \\pm v_D}{c \\pm v_S}\\)",
+                1: "\\(f' = f\\frac{c + v_D}{c + v_S}\\)",
+                2: "\\(f = f'\\frac{c - v_S}{c - v_D}\\)",
+                3: "\\(f' = f\\frac{c \\pm v_S}{c \\pm v_D}\\)",
+                4: "\\(f = f'\\frac{c \\pm v_S}{c \\pm v_D}\\)"
+            }
+        },
+        44: {
+            "question": "What is the lateral magnification due to a thin lens?",
+            "answers": {
+                0: "\\(m = -\\frac{i}{p}\\)",
+                1: "\\(m = \\frac{i}{p}\\)",
+                2: "\\(m = -\\frac{p}{i}\\)",
+                3: "\\(m = \\frac{p}{i}\\)",
+                4: "\\(m = \\frac{i}{f}\\)"
+            }
+        },
+        45: {
+            "question": "What is the lens equation for spherical mirrors?",
+            "answers": {
+                0: "\\(\\frac{1}{p} + \\frac{1}{i} = \\frac{1}{f}\\)",
+                1: "\\(n_T \\sin\\theta_T = n_I \\sin\\theta_I\\)",
+                2: "\\(n_T \\sin\\theta_I = n_I \\sin\\theta_T\\)",
+                3: "\\(\\frac{1}{f} + \\frac{1}{i} = \\frac{1}{p}\\)",
+                4: "\\(\\frac{1}{p} + \\frac{1}{f} = \\frac{1}{i}\\)"
+            }
+        },
+        46: {
+            "question": "What is Stirling's approximation?",
+            "answers": {
+                0: "\\(\\ln N! = N(\\ln N) - N\\)",
+                1: "\\(\\ln N! = (\\ln N) - N\\)",
+                2: "\\(N! = N(\\ln N)\\)",
+                3: "\\(\\ln N! = (\\ln N)\\)",
+                4: "\\(N! = N(\\ln N) - N\\)"
+            }
         }
     };
 
@@ -506,9 +630,22 @@
         length++;
     }
 
+    $( "#questioninput" ).attr("max", length-1);
+
     function poseQuestionClick() {
         poseQuestion(questions, length);
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        $( "#result" ).html("");
+        $( "#radio1" )[0].checked = false;
+        $( "#radio2" )[0].checked = false;
+        $( "#radio3" )[0].checked = false;
+        $( "#radio4" )[0].checked = false;
+        $( "#radio5" )[0].checked = false;
+    }
+
+    function poseSpecificQuestionClick() {
+        poseSpecificQuestion(questions, length);
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
         $( "#result" ).html("");
         $( "#radio1" )[0].checked = false;
         $( "#radio2" )[0].checked = false;
