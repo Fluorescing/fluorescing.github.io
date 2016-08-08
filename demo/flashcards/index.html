@@ -660,12 +660,12 @@
     var hue = 0.0;
 
     function timestep() {
-        hue += 0.01;
+        hue += 0.001;
 
         if (hue > 1.0)
             hue -= 1.0;
 
-        var rgb = hsl2rgb(hue, 1.0, 1.0);
+        var rgb = hsl2rgb(hue, 0.7, 0.7);
 
         var rhex = Math.round(Number(rgb[0]*255)).toString(16).toUpperCase();
         if (rhex.length < 2)
@@ -715,6 +715,6 @@
         return [(r*s + (1.0-s))*l, (g*s + (1.0-s))*l, (b*s + (1.0-s))*l];
     }
 
-    setInterval(timestep, 200);
+    setInterval(timestep, 500);
 </script>
 </html>
