@@ -10,28 +10,109 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
     <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+
+    <style>
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        input[type=checkbox]
+        {
+          /* Double-sized Checkboxes */
+          -ms-transform: scale(2); /* IE */
+          -moz-transform: scale(2); /* FF */
+          -webkit-transform: scale(2); /* Safari and Chrome */
+          -o-transform: scale(2); /* Opera */
+          padding: 10px;
+        }
+
+        input[type=radio]
+        {
+          /* Double-sized Checkboxes */
+          -ms-transform: scale(2); /* IE */
+          -moz-transform: scale(2); /* FF */
+          -webkit-transform: scale(2); /* Safari and Chrome */
+          -o-transform: scale(2); /* Opera */
+          padding: 10px;
+          margin: 10px;
+        }
+
+        #fillin {
+            cursor: pointer;
+        }
+
+        #fillintext {
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        .input {
+            font-size: 26px;
+
+        }
+    </style>
+    <script type="text/x-mathjax-config"> 
+    MathJax.Hub.Config({ 
+        "HTML-CSS": { scale: 150, linebreaks: { automatic: true } }, 
+        SVG: { linebreaks: { automatic:true } }, 
+        displayAlign: "left" });
+    </script>
+
 </head>
 <body>
     <h1>Flashcards</h1>
 
-    <h3 id="question">Question</h3>
+    <h2 id="question">Question</h2>
 
-    <form action="">
-        <input type="radio" name="answer" value="0" id="radio1"><span id="answer1" onclick="$( '#radio1' )[0].checked = true;">Answer 1</span><br><br>
-        <input type="radio" name="answer" value="1" id="radio2"><span id="answer2" onclick="$( '#radio2' )[0].checked = true;">Answer 2</span><br><br>
-        <input type="radio" name="answer" value="2" id="radio3"><span id="answer3" onclick="$( '#radio3' )[0].checked = true;">Answer 3</span><br><br>
-        <input type="radio" name="answer" value="3" id="radio4"><span id="answer4" onclick="$( '#radio4' )[0].checked = true;">Answer 4</span><br><br>
-        <input type="radio" name="answer" value="4" id="radio5"><span id="answer5" onclick="$( '#radio5' )[0].checked = true;">Answer 5</span><br><br>
-        
-        <button type="button" onclick="checkQuestion()">Check</button>
-        <button type="button" onclick="poseQuestionClick()">Another</button><br>
-        <input id="questioninput" type="number" min="0" max="0">
-        <button type="button" onclick="poseSpecificQuestionClick()">Goto</button>
-        <div id="result"></div>
-    </form>
+    <div id="radioantenna">
+    <input type="radio" name="answer" value="0" id="radio1"><span id="answer1" onclick="$( '#radio1' )[0].checked = true;">Answer 1</span><br><br>
+    <input type="radio" name="answer" value="1" id="radio2"><span id="answer2" onclick="$( '#radio2' )[0].checked = true;">Answer 2</span><br><br>
+    <input type="radio" name="answer" value="2" id="radio3"><span id="answer3" onclick="$( '#radio3' )[0].checked = true;">Answer 3</span><br><br>
+    <input type="radio" name="answer" value="3" id="radio4"><span id="answer4" onclick="$( '#radio4' )[0].checked = true;">Answer 4</span><br><br>
+    <input type="radio" name="answer" value="4" id="radio5"><span id="answer5" onclick="$( '#radio5' )[0].checked = true;">Answer 5</span><br><br>
+    </div>
+
+    <button class="button buttoncheck" onclick="checkQuestion()">Check</button>
+    <button class="button buttonanother" onclick="poseQuestionClick()">Another</button><br>
+    <div id="result"><h3>---</h3></div>
+    <div id="hiddenanswer"><h3>---</h3></div>
+    <input class="input" id="questioninput" type="number" min="0" max="0">
+    <button class="button buttongoto" onclick="poseSpecificQuestionClick()">Goto</button><br><br>
+    <input id="fillin" type="checkbox" onclick="fillin()"><span id="fillintext" onclick="fillinPress();"> Fill in the blank</span>
+    
 </body>
 
 <script>
+
+    function fillin() {
+        if ($( "#fillin" )[0].checked) {
+            $( "#radioantenna" ).attr("value", $( "#radioantenna" ).html());
+            $( "#radioantenna" ).html("");
+        } else {
+            $( "#radioantenna" ).html($( "#radioantenna" ).attr("value"));
+            $( "#radioantenna" ).attr("value", "");
+        }
+
+    }
+
+    function fillinPress() {
+        if ($( "#fillin" )[0].checked) {
+            $( "#fillin" )[0].checked = false;
+        } else {
+            $( "#fillin" )[0].checked = true;
+        }
+        fillin();
+    }
+
     $( function () {
         $("#answer1").html("\\(\\int_0^1 e^{-x^2} dx\\)");
 
@@ -106,40 +187,48 @@
         $( "#radio3" ).attr("value", answerC);
         $( "#radio4" ).attr("value", answerD);
         $( "#radio5" ).attr("value", answerE);
+
+        $( "#hiddenanswer" ).html("<h3>" + questions[questionId]["answers"][0] + "</h3>");
+        $( "#hiddenanswer" ).css("visibility", "hidden");
     }
 
     function checkQuestion() {
-        if ($( "#radio1" )[0].checked) {
-            if ($( "#radio1" ).attr("value") == 0) {
-                $( "#result" ).html("<h3>Correct!</h3>");
-            } else {
-                $( "#result" ).html("<h3>Wrong!</h3>");
-            }
-        } else if ($( "#radio2" )[0].checked) {
-            if ($( "#radio2" ).attr("value") == 0) {
-                $( "#result" ).html("<h3>Correct!</h3>");
-            } else {
-                $( "#result" ).html("<h3>Wrong!</h3>");
-            }
-        } else if ($( "#radio3" )[0].checked) {
-            if ($( "#radio3" ).attr("value") == 0) {
-                $( "#result" ).html("<h3>Correct!</h3>");
-            } else {
-                $( "#result" ).html("<h3>Wrong!</h3>");
-            }
-        } else if ($( "#radio4" )[0].checked) {
-            if ($( "#radio4" ).attr("value") == 0) {
-                $( "#result" ).html("<h3>Correct!</h3>");
-            } else {
-                $( "#result" ).html("<h3>Wrong!</h3>");
-            }
-        } else if ($( "#radio5" )[0].checked) {
-            if ($( "#radio5" ).attr("value") == 0) {
-                $( "#result" ).html("<h3>Correct!</h3>");
-            } else {
-                $( "#result" ).html("<h3>Wrong!</h3>");
-            }
-        } 
+        if ($( "#fillin" )[0].checked) {
+            $( "#hiddenanswer" ).css("visibility", "visible");
+        } else {
+            if ($( "#radio1" )[0].checked) {
+                if ($( "#radio1" ).attr("value") == 0) {
+                    $( "#result" ).html("<h3>Correct!</h3>");
+                } else {
+                    $( "#result" ).html("<h3>Wrong!</h3>");
+                }
+            } else if ($( "#radio2" )[0].checked) {
+                if ($( "#radio2" ).attr("value") == 0) {
+                    $( "#result" ).html("<h3>Correct!</h3>");
+                } else {
+                    $( "#result" ).html("<h3>Wrong!</h3>");
+                }
+            } else if ($( "#radio3" )[0].checked) {
+                if ($( "#radio3" ).attr("value") == 0) {
+                    $( "#result" ).html("<h3>Correct!</h3>");
+                } else {
+                    $( "#result" ).html("<h3>Wrong!</h3>");
+                }
+            } else if ($( "#radio4" )[0].checked) {
+                if ($( "#radio4" ).attr("value") == 0) {
+                    $( "#result" ).html("<h3>Correct!</h3>");
+                } else {
+                    $( "#result" ).html("<h3>Wrong!</h3>");
+                }
+            } else if ($( "#radio5" )[0].checked) {
+                if ($( "#radio5" ).attr("value") == 0) {
+                    $( "#result" ).html("<h3>Correct!</h3>");
+                } else {
+                    $( "#result" ).html("<h3>Wrong!</h3>");
+                }
+            }   
+        }
+        
     }
 
     var questions = {
@@ -635,7 +724,7 @@
 
     function resetForm() {
         MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-        $( "#result" ).html("");
+        $( "#result" ).html("<h3>---</h3>");
         $( "#radio1" )[0].checked = false;
         $( "#radio2" )[0].checked = false;
         $( "#radio3" )[0].checked = false;
