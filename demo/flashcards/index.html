@@ -82,10 +82,10 @@
     <button class="button buttoncheck" onclick="checkQuestion()">Check</button>
     <button class="button buttonanother" onclick="poseQuestionClick()">Another</button><br>
     <div id="result"><h3>---</h3></div>
-    <div id="hiddenanswer"><h3>---</h3></div>
+    <!--<div id="hiddenanswer"><h3>---</h3></div>-->
     <input class="input" id="questioninput" type="number" min="0" max="0">
     <button class="button buttongoto" onclick="poseSpecificQuestionClick()">Goto</button><br><br>
-    <input id="fillin" type="checkbox" onclick="fillin()"><span id="fillintext" onclick="fillinPress();"> Fill in the blank</span>
+    <input id="fillin" type="checkbox" onclick="fillin()"><span id="fillintext" onclick="fillinPress();"> Guess and check</span>
     
 </body>
 
@@ -186,13 +186,17 @@
         $( "#radio4" ).attr("value", answerD);
         $( "#radio5" ).attr("value", answerE);
 
-        $( "#hiddenanswer" ).html("<h3>" + questions[questionId]["answers"][0] + "</h3>");
-        $( "#hiddenanswer" ).css("visibility", "hidden");
+        $( "#result" ).attr("value", questions[questionId]["answers"][0]);
+
+        //$( "#hiddenanswer" ).html("<h3>" + questions[questionId]["answers"][0] + "</h3>");
+        //$( "#hiddenanswer" ).css("visibility", "hidden");
     }
 
     function checkQuestion() {
         if ($( "#fillin" )[0].checked) {
-            $( "#hiddenanswer" ).css("visibility", "visible");
+            $( "#result" ).html("<h3>" + $( "#result" ).attr("value") + "</h3>");
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            //$( "#hiddenanswer" ).css("visibility", "visible");
         } else {
             if ($( "#radio1" )[0].checked) {
                 if ($( "#radio1" ).attr("value") == 0) {
@@ -709,6 +713,86 @@
                 3: "\\(\\ln N! = (\\ln N)\\)",
                 4: "\\(N! = N(\\ln N) - N\\)"
             }
+        },
+        47: {
+            "question": "What is Bragg's law; the intensity maxima for x-ray diffraction?",
+            "answers": {
+                0: "\\(2d \\sin\\theta = m \\lambda,~m=1,2,3,...\\)",
+                1: "\\(d \\sin\\theta = m \\lambda,~m=1,3,5,...\\)",
+                2: "\\(d \\cos\\theta = m \\lambda,~m=1,2,3,...\\)",
+                3: "\\(d \\cos\\theta = m \\lambda,~m=1,3,5,...\\)",
+                4: "\\(2d \\sin\\theta = m \\lambda,~m=0,1,2,...\\)"
+            }
+        },
+        48: {
+            "question": "What is RMS speed of molecules in a gas?",
+            "answers": {
+                0: "\\(v_\\text{rms} = \\sqrt{\\frac{3RT}{M}}\\)",
+                1: "\\(v_\\text{rms} = \\sqrt{\\frac{5kT}{M}}\\)",
+                2: "\\(v_\\text{rms} = \\sqrt{\\frac{3RT}{2M}}\\)",
+                3: "\\(v_\\text{rms} = \\sqrt{\\frac{3kT}{M}}\\)",
+                4: "\\(v_\\text{rms} = \\sqrt{\\frac{RT}{2M}}\\)"
+            }
+        },
+        49: {
+            "question": "What is the energy density of a magnetic field?",
+            "answers": {
+                0: "\\(u_B = \\frac{B^2}{2\\mu_0}\\)",
+                1: "\\(u_B = \\frac{B}{2\\mu_0}\\)",
+                2: "\\(u_B = \\frac{2B^2}{\\mu_0}\\)",
+                3: "\\(u_B = \\frac{2B}{\\mu_0}\\)",
+                4: "\\(u_B = \\frac{B^2}{2\\epsilon_0}\\)"
+            }
+        },
+        50: {
+            "question": "What is capacitance of a cylindrical capacitor?",
+            "answers": {
+                0: "\\(C = \\frac{2\\pi\\epsilon_0 L}{\\ln|b/a|}\\)",
+                1: "\\(C = \\frac{2\\pi\\epsilon_0 L}{\\ln|a/b|}\\)",
+                2: "\\(C = \\frac{\\pi\\epsilon_0 L}{\\ln|b/a|}\\)",
+                3: "\\(C = \\frac{\\pi\\epsilon_0 L}{\\ln|a/b|}\\)",
+                4: "\\(C = \\frac{2\\pi\\mu_0 L}{\\ln|b/a|}\\)"
+            }
+        },
+        51: {
+            "question": "What is the electric field due to an infinitely long wire?",
+            "answers": {
+                0: "\\(E = \\frac{1}{4\\pi\\epsilon_0}\\frac{2\\lambda}{s}\\)",
+                1: "\\(E = \\frac{1}{4\\pi\\epsilon_0}\\frac{2s}{\\lambda}\\)",
+                2: "\\(E = \\frac{1}{4\\pi\\epsilon_0}\\frac{\\lambda}{s}\\)",
+                3: "\\(E = \\frac{1}{4\\pi\\epsilon_0}\\frac{s}{\\lambda}\\)",
+                4: "\\(E = \\frac{1}{4\\pi\\mu_0}\\frac{\\lambda}{2s}\\)"
+            }
+        },
+        52: {
+            "question": "What is the relativistic doppler shift?",
+            "answers": {
+                0: "\\(f = f_0 \\sqrt{\\frac{1 - \\beta}{1 + \\beta}}\\)",
+                1: "\\(f = f_0 \\sqrt{\\frac{1 + \\beta}{1 + \\beta}}\\)",
+                2: "\\(f = f_0 \\sqrt{\\frac{1 + \\beta}{1 - \\beta}}\\)",
+                3: "\\(f = f_0 \\sqrt{\\frac{1 - \\beta}{1 - \\beta}}\\)",
+                4: "\\(f = f_0 \\frac{1 - \\beta}{1 + \\beta}\\)"
+            }
+        },
+        53: {
+            "question": "What is the average energy of light transported over time?",
+            "answers": {
+                0: "\\(I = \\frac{1}{c\\mu_0} E_\\text{rms}^2,~E_\\text{rms} = \\frac{E_0}{\\sqrt{2}}\\)",
+                1: "\\(I = \\frac{1}{c\\epsilon_0} E_\\text{rms}^2,~E_\\text{rms} = \\frac{E_0}{\\sqrt{2}}\\)",
+                2: "\\(I = \\frac{1}{c\\mu_0} E_\\text{rms},~E_\\text{rms} = E_0\\)",
+                3: "\\(I = \\frac{1}{\\epsilon_0\\mu_0} E_\\text{rms}^2,~E_\\text{rms} = \\frac{E_0}{\\sqrt{2}}\\)",
+                4: "\\(I = \\frac{1}{c\\mu_0} E_\\text{rms},~E_\\text{rms} = \\frac{E_0}{2}\\)"
+            }
+        },
+        54: {
+            "question": "What is the net radiation of heat of an object?",
+            "answers": {
+                0: "\\(P_\\text{rms} = \\sigma \\epsilon A (T_\\text{env}^4 - T^4_\\text{obj})\\)",
+                1: "\\(P_\\text{rms} = \\sigma A (T_\\text{env}^4 - T^4_\\text{obj})\\)",
+                2: "\\(P_\\text{rms} = \\sigma \\epsilon A (T_\\text{env}^2 - T^2_\\text{obj})\\)",
+                3: "\\(P_\\text{rms} = \\sigma A (T_\\text{env}^2 - T^2_\\text{obj})\\)",
+                4: "\\(P_\\text{rms} = \\sigma \\epsilon A (T_\\text{env}^3 - T^3_\\text{obj})\\)"
+            }
         }
     };
 
@@ -771,6 +855,7 @@
         var color = "#" + rhex + ghex + bhex;
 
         $( "#meta" ).attr("content", color);
+        $( ".button" ).css("background-color", color);
     }
 
 
