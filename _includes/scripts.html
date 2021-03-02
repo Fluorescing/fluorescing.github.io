@@ -3,67 +3,60 @@
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/library.js"></script>
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/javascript">
 
-function SetSerif()
-{
+  function SetSerif() {
     $('body').css({
-        'font-family': '"Libre Baskerville", Georgia, Times'
+      'font-family': '"Libre Baskerville", Georgia, Times'
     });
 
     $('h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6').css({
-        'font-family': '"Libre Baskerville", Georgia, Times'
+      'font-family': '"Libre Baskerville", Georgia, Times'
     });
 
-    document.cookie="font=serif; path=/";
-}
+    document.cookie = "font=serif; path=/; SameSite=None; Secure";
+  }
 
-function SetSans()
-{
+  function SetSans() {
     $('body').css({
-        'font-family': 'Arimo, Helvetica, sans-serif'
+      'font-family': 'Arimo, Helvetica, sans-serif'
     });
 
     $('h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6').css({
-        'font-family': 'Arimo, Helvetica, sans-serif'
+      'font-family': 'Arimo, Helvetica, sans-serif'
     });
 
-    document.cookie="font=sans; path=/";
-}
+    document.cookie = "font=sans; path=/; SameSite=None; Secure";
+  }
 
-function SetFont(font)
-{
-
+  function SetFont(font) {
     switch (font) {
-        case 'serif':
-            SetSerif();
-            break;
-        case 'sans':
-            SetSans();
-            break;
-        default:
-            console.log('Invalid font type');
-            break;
+      case 'serif':
+        SetSerif();
+        break;
+      case 'sans':
+        SetSans();
+        break;
+      default:
+        console.log('Invalid font type: ' + font);
+        break;
     }
     return 0;
-}
+  }
 
-function GetCookie(cname) {
+  function GetCookie(cname) {
     var name = cname + "=";
     var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') c = c.substring(1);
+      if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
     }
     return "";
-}
+  }
 
-fonttype = GetCookie('font');
-
-SetFont(fonttype);
-
-
+  fonttype = GetCookie('font');
+  if (fonttype != "") SetFont(fonttype);
 </script>

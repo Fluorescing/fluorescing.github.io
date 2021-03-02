@@ -1,2 +1,75 @@
-permalink: /notes/:year/:month/:day/:title
+# References:
+# - https://jekyllrb.com/docs/configuration/default/
+# - https://docs.github.com/en/github/working-with-github-pages/about-github-pages-and-jekyll
+
+# Where things are
+# source: .
+destination: ./_site
+# collections_dir: .
+# plugins_dir: _plugins # takes an array of strings and loads plugins in that order
+layouts_dir: _layouts
+# data_dir: _data
+includes_dir: _includes
+# sass:
+#   sass_dir: _sass
+collections:
+  posts:
+    output: true
+
+# Handling Reading
+safe: true
+exclude:
+  [
+    "Gemfile",
+    "Gemfile.lock",
+    "node_modules",
+    "vendor/bundle/",
+    "vendor/cache/",
+    "vendor/gems/",
+    "vendor/ruby/",
+  ]
+encoding: "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+strict_front_matter: false
+
+# Filtering Content
+show_drafts: false
+limit_posts: 0
+future: false
+unpublished: false
+
+# Plugins
+# whitelist: []
+# plugins: []
+
+# Conversion
 markdown: kramdown
+highlighter: rouge
+lsi: false
+
+# Outputting
+permalink: /notes/:year/:month/:day/:title
+paginate_path: /page:num
+timezone: "America/Los_Angeles"
+
+quiet: false
+verbose: false
+# defaults: []
+
+liquid:
+  error_mode: warn
+
+gist:
+  noscript: false
+
+# Markdown Processors
+kramdown:
+  auto_ids: true
+  entity_output: as_char
+  smart_quotes: lsquo,rsquo,ldquo,rdquo
+  input: GFM
+  hard_wrap: false
+  footnote_nr: 1
+  show_warnings: false
+  math_engine: mathjax
+  syntax_highlighter: rouge

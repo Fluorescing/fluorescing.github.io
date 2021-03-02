@@ -2,39 +2,37 @@ var audioContext = false;
 var oscillator;
 var volume;
 
-//var notes = [440.0, 493.88, 523.25, 587.33, 659.25, 698.46, 783.99];
 var notes = [523.25, 523.25, 783.99, 783.99, 880.0, 880.0, 783.99, 698.46, 698.46, 659.25, 659.25, 587.33, 587.33, 523.25];
 var index = 0;
 var mul = 0;
 
-
 var sines = [0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 var cosines = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
-var Node = (function() {
-    function Node(object) {
+class EnvNode {
+    constructor(object) {
         this.parent = false;
         this.child = false;
-        this.value = object; 
+        this.value = object;
     }
 
-    Node.prototype.after = function(object) {
-        var temp = new Node(object);
+    after(object) {
+        var temp = new EnvNode(object);
         temp.parent = this;
         temp.child = this.child;
         this.child = temp;
         return temp;
     }
 
-    Node.prototype.before = function(object) {
-        var temp = new Node(object);
+    before(object) {
+        var temp = new EnvNode(object);
         temp.parent = this.parent;
         this.parent = temp;
         temp.child = this;
         return temp;
     }
 
-    Node.prototype.root = function() {
+    root() {
         var iter = this;
         while (iter.parent) {
             iter = iter.parent;
@@ -42,7 +40,7 @@ var Node = (function() {
         return iter;
     }
 
-    Node.prototype.remove = function() {
+    remove() {
         if (this.parent) {
             this.parent.child = this.child;
         }
@@ -51,12 +49,47 @@ var Node = (function() {
             this.child.parent = this.parent;
         }
     }
+}
 
-    return Node;
-})();
+// Voltage Controlled Oscillator Class
+class VCO {
+    constructor(context) {
+        this.context = context
+        this.oscillator = context.createOscillator();
+        this.oscillator.type = 'sawtooth';
+        this.setFrequency(440);
+        this.oscillator.start(0);
+
+        this.input = this.oscillator;
+        this.output = this.oscillator;
+
+        // callback for setting the frequency
+        var that = this;
+        $(document).bind('frequency', function (_, frequency) {
+            that.setFrequency(frequency);
+        });
+    }
+
+    setPeriodicWave(waveTable) {
+        this.oscillator.setPeriodicWave(waveTable);
+    }
+
+    setFrequency(frequency) {
+        this.oscillator.frequency.setValueAtTime(frequency, this.context.currentTime);
+    }
+
+    connect(node) {
+        if (node.hasOwnProperty('input')) {
+            this.output.connect(node.input);
+        }
+        else {
+            this.output.connect(node);
+        }
+    }
+}
 
 var root, next;
-next = new Node([0.0, 0.0, 'linear']);
+next = new EnvNode([0.0, 0.0, 'linear']);
 next = next.after([1.0, 0.1, 'linear']);
 next = next.after([0.2, 0.3, 'exponential']);
 next = next.after([0.2, 0.6, 'linear']);
@@ -69,8 +102,8 @@ for (var iter = root; iter; iter = iter.child) {
 }
 
 function main() {
-    var waveCanvas = $( '#wave-canvas' );
-    var envelopeCanvas = $( '#envelope-canvas' );
+    var waveCanvas = $('#wave-canvas');
+    var envelopeCanvas = $('#envelope-canvas');
 
     // setup audio context
     if ('AudioContext' in window) {
@@ -80,64 +113,26 @@ function main() {
         audioContext = new webkitAudioContext();
     }
 
-    // Voltage Controlled Oscillator Class
-    var VCO = (function(context) {
-        function VCO() {
-            this.oscillator = context.createOscillator();
-            this.oscillator.type = 'sawtooth';
-            this.setFrequency(440);
-            this.oscillator.start(0);
-
-            this.input = this.oscillator;
-            this.output = this.oscillator;
-
-            // callback for setting the frequency
-            var that = this;
-            $(document).bind('frequency', function(_, frequency) {
-                that.setFrequency(frequency);
-            });
-        }
-
-        VCO.prototype.setPeriodicWave = function(waveTable) {
-            this.oscillator.setPeriodicWave(waveTable);
-        };
-
-        VCO.prototype.setFrequency = function(frequency) {
-            this.oscillator.frequency.setValueAtTime(frequency, context.currentTime);
-        };
-
-        VCO.prototype.connect = function(node){
-            if (node.hasOwnProperty('input')) {
-                this.output.connect(node.input);
-            }
-            else {
-                this.output.connect(node);    
-            }
-        };
-
-        return VCO;
-    })(audioContext);
-
     var now = audioContext.currentTime;
 
-    oscillator = new VCO();
+    oscillator = new VCO(audioContext);
 
     volume = audioContext.createGain();
     volume.gain.linearRampToValueAtTime(0.0, now);
-    
+
     oscillator.connect(volume);
     volume.connect(audioContext.destination);
 
     // sliders
-    $( "#sines > span" ).each(function() {
-        var value = parseFloat($( this ).text());
-        $( this ).empty().slider({
+    $("#sines > span").each(function () {
+        var value = parseFloat($(this).text());
+        $(this).empty().slider({
             value: value,
             animate: true,
             min: 0.0,
             max: 100.0,
             orientation: "vertical",
-            slide: function( event, ui ) {
+            slide: function (event, ui) {
                 for (var i = 1; i <= 11; i++) {
                     if (ui.handle.parentNode.id == "sine" + i) {
                         sines[i] = ui.value / 100.0;
@@ -149,9 +144,9 @@ function main() {
     });
 
     // play button
-    $( '#play' )
+    $('#play')
         .button()
-        .click(function(event) {
+        .click(function (event) {
             event.preventDefault();
             playNote();
             redrawEnvelopeCanvas(envelopeCanvas);
@@ -246,46 +241,45 @@ function redrawEnvelopeCanvas(canvas) {
         var y = -Math.sqrt(iter.value[0]) * 160 + 170;
 
         if (iter.value[2] == 'exponential') {
-            ctx.quadraticCurveTo(lx*0.666 + x*0.333, y, x, y);
+            ctx.quadraticCurveTo(lx * 0.666 + x * 0.333, y, x, y);
         } else {
             ctx.lineTo(x, y);
         }
-        
+
         lx = x;
         ly = y;
-        
+
     }
     ctx.lineTo(720, 170);
     ctx.stroke();
 }
 
 function drawFourierSeries(canvas, sines, cosines) {
-    if (typeof sines[0] != 'number' || typeof sines.length != 'number')
+    if (typeof sines[0] != 'number' || typeof sines.length != 'number') {
         console.error("drawFourierSeries: sines is not an numerical array");
-    if (typeof cosines[0] != 'number' || typeof sines.length != 'number')
+    }
+    if (typeof cosines[0] != 'number' || typeof sines.length != 'number') {
         console.error("drawFourierSeries: cosines is not an numerical array");
-    if (sines.length != cosines.length)
+    }
+    if (sines.length != cosines.length) {
         console.error("drawFourierSeries: the length of sines and cosines must be equal");
-
+    }
     var ctx = canvas[0].getContext("2d");
 
     ctx.strokeStyle = "#FF0000";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    
+
     ctx.moveTo(0, 90);
     for (var i = 0; i < 720; i++) {
         var x = i - 360;
         var theta = Math.PI * (x + 1) / (120.0);
-
         var sum = 0.0;
-
-        for (var n = 1; n < sines.length; n++)
-        {
+        for (var n = 1; n < sines.length; n++) {
             sum += sines[n] * Math.sin(n * theta);
             sum += cosines[n] * Math.cos(n * theta);
         }
-        ctx.lineTo(i + 1, 60.0*sum + 90.0)
+        ctx.lineTo(i + 1, 60.0 * sum + 90.0)
     }
 
     ctx.stroke();
@@ -306,6 +300,7 @@ function clearCanvas(canvas, color) {
 // static
 var last_x = false;
 var last_y = false;
+
 function doMouseMove(event) {
     var target = $('#' + event.target.id);
     x = event.offsetX / target.width();
@@ -321,7 +316,6 @@ function doMouseMove(event) {
     ctx.beginPath();
     ctx.moveTo(last_x * 720, last_y * 180);
     ctx.lineTo(x * 720, y * 180);
-    //ctx.stroke();
 
     last_x = x;
     last_y = y;
@@ -369,12 +363,6 @@ function playNote() {
             volume.gain.linearRampToValueAtTime(iter.value[0], now + iter.value[1]);
         }
     }
-
-    // volume.gain.linearRampToValueAtTime(0.0, now);
-    // volume.gain.linearRampToValueAtTime(1.0, now + 0.05);
-    // volume.gain.exponentialRampToValueAtTime(0.2, now + 0.3);
-    // volume.gain.linearRampToValueAtTime(0.2, now + 0.5);
-    // volume.gain.linearRampToValueAtTime(0.0, now + 0.8);
 }
 
-$( main );
+$(main);
